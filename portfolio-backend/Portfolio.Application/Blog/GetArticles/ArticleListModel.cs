@@ -13,7 +13,9 @@ public class ArticleListModel
     public required string ExcerptEn { get; set; }
     public string? CoverImageUrl { get; set; }
     public required string[] Tags { get; set; }
-    public required DateTimeOffset? PublishedAt { get; set; }
+    public required bool IsPublished { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? PublishedAt { get; set; }
 
     public static readonly Expression<Func<Article, ArticleListModel>> FromArticle = article =>
         new ArticleListModel
@@ -26,6 +28,8 @@ public class ArticleListModel
             ExcerptEn = article.ExcerptEn,
             CoverImageUrl = article.CoverImageUrl,
             Tags = article.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries),
+            IsPublished = article.IsPublished,
+            CreatedAt = article.CreatedAt,
             PublishedAt = article.PublishedAt
         };
 }

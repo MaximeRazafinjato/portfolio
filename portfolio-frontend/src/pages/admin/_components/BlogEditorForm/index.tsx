@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { Save, Send } from 'lucide-react'
+import { Save, Send, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -85,10 +85,22 @@ export default function BlogEditorForm({ article, isEditing }: BlogEditorFormPro
     }
   }
 
-  const handleSaveDraft = handleSubmit((data) => onSubmit(data, false))
-  const handlePublish = handleSubmit((data) => onSubmit(data, true))
-
   const isPublished = watch('isPublished')
+
+  const hasFrenchErrors = useMemo(() => {
+    return !!(errors.title || errors.content || errors.excerpt)
+  }, [errors.title, errors.content, errors.excerpt])
+
+  const hasEnglishErrors = useMemo(() => {
+    return !!(errors.titleEn || errors.contentEn || errors.excerptEn)
+  }, [errors.titleEn, errors.contentEn, errors.excerptEn])
+
+  const onInvalid = () => {
+    toast.error('Veuillez corriger les erreurs du formulaire')
+  }
+
+  const handleSaveDraft = handleSubmit((data) => onSubmit(data, false), onInvalid)
+  const handlePublish = handleSubmit((data) => onSubmit(data, true), onInvalid)
 
   return (
     <form className="space-y-6">
@@ -123,8 +135,14 @@ export default function BlogEditorForm({ article, isEditing }: BlogEditorFormPro
 
       <Tabs defaultValue="fr" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="fr">🇫🇷 Français</TabsTrigger>
-          <TabsTrigger value="en">🇬🇧 English</TabsTrigger>
+          <TabsTrigger value="fr" className="flex items-center gap-2">
+            🇫🇷 Français
+            {hasFrenchErrors && <AlertCircle className="h-4 w-4 text-destructive" />}
+          </TabsTrigger>
+          <TabsTrigger value="en" className="flex items-center gap-2">
+            🇬🇧 English
+            {hasEnglishErrors && <AlertCircle className="h-4 w-4 text-destructive" />}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="fr" className="space-y-4 mt-4">
