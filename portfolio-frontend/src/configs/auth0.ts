@@ -5,4 +5,6 @@ export const auth0Config = {
     redirect_uri: typeof window !== 'undefined' ? window.location.origin : '',
     audience: import.meta.env.VITE_AUTH0_AUDIENCE || '',
   },
+  cacheLocation: 'localstorage' as const,
+  useRefreshTokens: true,
 }

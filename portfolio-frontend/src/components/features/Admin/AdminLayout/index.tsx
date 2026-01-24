@@ -19,7 +19,11 @@ export default function AdminLayout() {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-4">
         <h1 className="text-2xl font-bold">Admin - Connexion requise</h1>
-        <Button onClick={() => loginWithRedirect()}>
+        <Button onClick={() => loginWithRedirect({
+          authorizationParams: {
+            redirect_uri: `${window.location.origin}/admin`
+          }
+        })}>
           Se connecter
         </Button>
       </div>
