@@ -6,9 +6,9 @@ namespace Portfolio.Application.Blog.GetArticles;
 
 public class GetArticlesService(IArticleRepository repository) : IService
 {
-    public async Task<PaginatedResult<ArticleListModel>> ExecuteAsync(int page, int pageSize, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<ArticleListModel>> ExecuteAsync(int page, int pageSize, bool includeUnpublished, CancellationToken cancellationToken)
     {
-        var query = repository.GetPublished();
+        var query = includeUnpublished ? repository.GetAll() : repository.GetPublished();
 
         var totalCount = await query.CountAsync(cancellationToken);
 

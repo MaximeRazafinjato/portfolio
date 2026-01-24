@@ -14,8 +14,9 @@ public class GetArticlesFunction(GetArticlesService service)
     {
         var page = int.TryParse(req.Query["page"], out var p) ? p : 1;
         var pageSize = int.TryParse(req.Query["pageSize"], out var ps) ? Math.Min(ps, 50) : 10;
+        var includeUnpublished = bool.TryParse(req.Query["includeUnpublished"], out var iu) && iu;
 
-        var result = await service.ExecuteAsync(page, pageSize, cancellationToken);
+        var result = await service.ExecuteAsync(page, pageSize, includeUnpublished, cancellationToken);
 
         return new OkObjectResult(result);
     }
