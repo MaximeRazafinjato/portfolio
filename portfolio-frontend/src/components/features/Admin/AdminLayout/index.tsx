@@ -1,9 +1,11 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Button } from '@/components/ui/button'
+import { useAuthToken } from '@/hooks/useAuthToken'
 
 export default function AdminLayout() {
   const { isAuthenticated, isLoading, loginWithRedirect, logout, user } = useAuth0()
+  useAuthToken()
 
   if (isLoading) {
     return (
@@ -28,7 +30,14 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-background">
       <header className="border-b px-6 py-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">Admin</h1>
+          <div className="flex items-center gap-6">
+            <Link to="/admin" className="text-xl font-bold hover:text-primary">
+              Admin
+            </Link>
+            <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+              ← Retour au site
+            </Link>
+          </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">{user?.email}</span>
             <Button variant="outline" size="sm" onClick={() => logout()}>

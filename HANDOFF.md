@@ -181,9 +181,52 @@ portfolio-backend/
 - Méthodes repository nommées `GetOrDefaultAsync` (convention)
 - Messages d'erreur en français
 
+### ✅ Phase 4 - Frontend Admin (TERMINÉE)
+
+**Structure créée :**
+
+```
+portfolio-frontend/src/
+├── lib/
+│   └── api.ts                                # Client axios + endpoints API
+├── hooks/
+│   └── useAuthToken.ts                       # Hook pour injecter le token Auth0
+├── domains/
+│   └── blog/
+│       ├── index.ts                          # Barrel export
+│       ├── types.ts                          # Types Article + schéma Zod
+│       ├── constants.ts                      # Query keys React Query
+│       ├── queries.ts                        # useArticlesQuery, useArticleByIdQuery
+│       └── mutations.ts                      # CRUD mutations (create, update, delete, toggle publish)
+├── pages/
+│   └── admin/
+│       ├── AdminDashboard.tsx                # Dashboard avec liste articles
+│       ├── AdminBlogEditor.tsx               # Page éditeur (new/edit)
+│       └── _components/
+│           ├── ArticleList/index.tsx         # Liste paginée avec actions
+│           ├── ArticleListItem/index.tsx     # Item avec boutons (éditer, supprimer, publier)
+│           └── BlogEditorForm/index.tsx      # Formulaire bilingue FR/EN avec tabs
+└── components/
+    ├── ui/
+    │   └── textarea.tsx                      # Composant Textarea (ajouté)
+    └── features/
+        └── Admin/
+            └── AdminLayout/index.tsx         # Layout admin avec Auth0 (amélioré)
+```
+
+**Fonctionnalités implémentées :**
+- Routes protégées Auth0 (`/admin`, `/admin/blog/new`, `/admin/blog/:id/edit`)
+- Layout admin avec authentification (login/logout, affichage email)
+- Dashboard avec liste des articles paginée
+- Actions sur articles : éditer, supprimer, publier/dépublier
+- Éditeur d'article bilingue avec onglets FR/EN
+- Formulaire validé avec Zod (titre, contenu, extrait, tags, image)
+- Boutons "Sauvegarder brouillon" et "Publier"
+- Intégration React Query (TanStack Query v5) pour le cache et les mutations
+- Client axios avec injection automatique du token Auth0
+
 ### ❌ Phases restantes
-- **Phase 4** : Frontend - Admin (Blog editor)
-- **Phase 5** : Page détail Blog
+- **Phase 5** : Page détail Blog (public)
 - **Phase 6** : Polish & Optimisations
 - **Phase 7** : Déploiement Azure
 - **Phase 8** : Contenu (données, traductions, assets)
@@ -229,24 +272,21 @@ portfolio-backend/
 
 ## Prochaines étapes
 
-### Phase 4 - Frontend Admin (Blog editor)
+### Phase 5 - Page détail Blog (public)
 
-1. **Routes protégées Auth0**
-   - Guard d'authentification
-   - `/admin` - Dashboard (liste articles)
-   - `/admin/blog/new` - Créer article
-   - `/admin/blog/:id/edit` - Éditer article
+1. **BlogDetailPage**
+   - Affichage du contenu Markdown (installer react-markdown)
+   - Métadonnées (date, auteur, tags)
+   - Image de couverture
+   - Contenu bilingue selon la langue active
 
-2. **BlogEditor Component**
-   - Formulaire complet (titre FR/EN, contenu FR/EN, etc.)
-   - Éditeur Markdown avec preview
-   - Upload image de couverture
-   - Gestion des tags
-   - Boutons publier/sauvegarder brouillon
+2. **Liste des articles sur HomePage** (optionnel)
+   - Section "Derniers articles" sur la page d'accueil
+   - Cards avec aperçu (image, titre, extrait)
 
-3. **Intégration API**
-   - React Query mutations pour CRUD articles
-   - Gestion des états loading/error
+3. **Navigation blog**
+   - Lien depuis le header vers `/blog`
+   - Page liste articles publique
 
 ---
 
