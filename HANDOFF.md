@@ -225,8 +225,42 @@ portfolio-frontend/src/
 - Intégration React Query (TanStack Query v5) pour le cache et les mutations
 - Client axios avec injection automatique du token Auth0
 
+### ✅ Phase 5 - Blog Public (TERMINÉE)
+
+**Composants créés :**
+
+```
+portfolio-frontend/src/
+├── pages/
+│   ├── BlogDetailPage.tsx                    # Page détail article avec Markdown
+│   └── blog/
+│       ├── BlogListPage.tsx                  # Liste paginée des articles
+│       └── _components/
+│           └── ArticleCard/index.tsx         # Card article pour la liste
+├── components/features/
+│   └── Blog/
+│       ├── index.tsx                         # Section "Derniers articles" pour HomePage
+│       └── _components/
+│           └── RecentArticleCard/index.tsx   # Card article compact
+```
+
+**Fonctionnalités implémentées :**
+- Page `/blog` avec liste paginée des articles publiés
+- Page `/blog/:slug` avec rendu Markdown (react-markdown + remark-gfm + rehype-highlight)
+- Coloration syntaxique du code (highlight.js github-dark theme)
+- Section "Derniers articles" sur la HomePage (3 articles)
+- Navigation mise à jour : lien Blog pointe vers `/blog`
+- Support bilingue FR/EN pour titre, contenu, extrait
+- Métadonnées : date, temps de lecture estimé, tags
+- Image de couverture optionnelle
+- Skeleton loading states
+
+**Packages ajoutés :**
+- react-markdown 10.1.0
+- remark-gfm 4.0.1
+- rehype-highlight 7.0.2
+
 ### ❌ Phases restantes
-- **Phase 5** : Page détail Blog (public)
 - **Phase 6** : Polish & Optimisations
 - **Phase 7** : Déploiement Azure
 - **Phase 8** : Contenu (données, traductions, assets)
@@ -272,21 +306,22 @@ portfolio-frontend/src/
 
 ## Prochaines étapes
 
-### Phase 5 - Page détail Blog (public)
+### Phase 6 - Polish & Optimisations
 
-1. **BlogDetailPage**
-   - Affichage du contenu Markdown (installer react-markdown)
-   - Métadonnées (date, auteur, tags)
-   - Image de couverture
-   - Contenu bilingue selon la langue active
+1. **SEO & Performance**
+   - Meta tags dynamiques (react-helmet ou équivalent)
+   - Lazy loading des images
+   - Optimisation du bundle
 
-2. **Liste des articles sur HomePage** (optionnel)
-   - Section "Derniers articles" sur la page d'accueil
-   - Cards avec aperçu (image, titre, extrait)
+2. **UX Améliorations**
+   - Page 404 personnalisée
+   - Scroll to top on navigation
+   - Progress bar de lecture pour les articles
 
-3. **Navigation blog**
-   - Lien depuis le header vers `/blog`
-   - Page liste articles publique
+3. **Accessibilité**
+   - Skip links
+   - ARIA labels complets
+   - Focus management
 
 ---
 

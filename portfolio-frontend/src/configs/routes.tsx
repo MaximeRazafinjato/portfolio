@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react'
 
 const MainLayout = lazy(() => import('@/components/layout/MainLayout'))
 const HomePage = lazy(() => import('@/pages/HomePage'))
+const BlogListPage = lazy(() => import('@/pages/blog/BlogListPage'))
 const BlogDetailPage = lazy(() => import('@/pages/BlogDetailPage'))
 const AdminLayout = lazy(() => import('@/components/features/Admin/AdminLayout'))
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'))
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: withSuspense(HomePage),
+      },
+      {
+        path: 'blog',
+        element: withSuspense(BlogListPage),
       },
       {
         path: 'blog/:slug',

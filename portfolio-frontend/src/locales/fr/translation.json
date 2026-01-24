@@ -56,7 +56,8 @@
     "readMore": "Lire la suite",
     "readTime": "{{minutes}} min de lecture",
     "noArticles": "Aucun article pour le moment.",
-    "backToList": "Retour au blog"
+    "backToList": "Retour au blog",
+    "viewAll": "Voir tous les articles"
   },
   "contact": {
     "title": "Contact",

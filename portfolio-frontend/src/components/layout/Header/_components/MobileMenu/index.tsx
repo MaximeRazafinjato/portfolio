@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { navItems } from '@/constants/navigation'
@@ -48,17 +49,32 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           className="absolute left-0 right-0 top-full overflow-hidden border-b bg-background/95 backdrop-blur-md md:hidden"
         >
           <nav className="container flex flex-col gap-2 px-4 py-4">
-            {navItems.map((item) => (
-              <motion.a
-                key={item.id}
-                href={item.href}
-                variants={itemVariants}
-                onClick={onClose}
-                className="rounded-md px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-primary"
-              >
-                {t(item.labelKey)}
-              </motion.a>
-            ))}
+            {navItems.map((item) => {
+              const isAnchor = item.href.startsWith('#')
+              const className = "rounded-md px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-primary"
+
+              if (isAnchor) {
+                return (
+                  <motion.a
+                    key={item.id}
+                    href={item.href}
+                    variants={itemVariants}
+                    onClick={onClose}
+                    className={className}
+                  >
+                    {t(item.labelKey)}
+                  </motion.a>
+                )
+              }
+
+              return (
+                <motion.div key={item.id} variants={itemVariants}>
+                  <Link to={item.href} onClick={onClose} className={className}>
+                    {t(item.labelKey)}
+                  </Link>
+                </motion.div>
+              )
+            })}
             <motion.div
               variants={itemVariants}
               className="mt-2 flex items-center justify-between border-t pt-4"

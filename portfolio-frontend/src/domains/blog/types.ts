@@ -9,7 +9,7 @@ export const articleFormSchema = z.object({
   excerptEn: z.string().min(10, 'L\'extrait anglais doit contenir au moins 10 caractères').max(300, 'L\'extrait anglais ne doit pas dépasser 300 caractères'),
   coverImageUrl: z.string().url('URL invalide').optional().or(z.literal('')),
   tags: z.string().optional(),
-  isPublished: z.boolean().default(false),
+  isPublished: z.boolean(),
 })
 
 export type ArticleFormData = z.infer<typeof articleFormSchema>

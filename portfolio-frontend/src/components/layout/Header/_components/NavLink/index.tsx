@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 
@@ -9,21 +10,43 @@ interface NavLinkProps {
 
 export default function NavLink({ href, labelKey, onClick }: NavLinkProps) {
   const { t } = useTranslation()
+  const isAnchor = href.startsWith('#')
 
-  return (
-    <motion.a
-      href={href}
-      onClick={onClick}
-      className="relative px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
+  const className = "relative px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+
+  const content = (
+    <>
       {t(labelKey)}
       <motion.span
         className="absolute bottom-0 left-0 h-0.5 w-0 bg-primary"
         whileHover={{ width: '100%' }}
         transition={{ duration: 0.2 }}
       />
-    </motion.a>
+    </>
+  )
+
+  if (isAnchor) {
+    return (
+      <motion.a
+        href={href}
+        onClick={onClick}
+        className={className}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {content}
+      </motion.a>
+    )
+  }
+
+  return (
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <Link to={href} onClick={onClick} className={className}>
+        {content}
+      </Link>
+    </motion.div>
   )
 }

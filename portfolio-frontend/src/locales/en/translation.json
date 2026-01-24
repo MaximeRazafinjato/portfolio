@@ -56,7 +56,8 @@
     "readMore": "Read more",
     "readTime": "{{minutes}} min read",
     "noArticles": "No articles yet.",
-    "backToList": "Back to blog"
+    "backToList": "Back to blog",
+    "viewAll": "View all articles"
   },
   "contact": {
     "title": "Contact",
