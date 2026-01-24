@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
@@ -46,14 +47,11 @@ export default function Header() {
       }`}
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <motion.a
-          href="#"
-          className="text-xl font-bold text-primary"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {personalInfo.name.split(' ')[0]}
-        </motion.a>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Link to="/" className="text-xl font-bold text-primary">
+            {personalInfo.name.split(' ')[0]}
+          </Link>
+        </motion.div>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label={t('accessibility.mainNavigation')}>
           {navItems.map((item) => (

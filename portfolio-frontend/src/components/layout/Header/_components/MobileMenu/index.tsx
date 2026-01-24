@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { navItems } from '@/constants/navigation'
@@ -37,6 +37,8 @@ const itemVariants = {
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const { t } = useTranslation()
+  const location = useLocation()
+  const isOnHomePage = location.pathname === '/'
 
   return (
     <AnimatePresence>
@@ -54,7 +56,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               const isAnchor = item.href.startsWith('#')
               const className = "rounded-md px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-primary"
 
-              if (isAnchor) {
+              if (isAnchor && isOnHomePage) {
                 return (
                   <motion.a
                     key={item.id}
@@ -65,6 +67,16 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   >
                     {t(item.labelKey)}
                   </motion.a>
+                )
+              }
+
+              if (isAnchor) {
+                return (
+                  <motion.div key={item.id} variants={itemVariants}>
+                    <Link to={`/${item.href}`} onClick={onClose} className={className}>
+                      {t(item.labelKey)}
+                    </Link>
+                  </motion.div>
                 )
               }
 
