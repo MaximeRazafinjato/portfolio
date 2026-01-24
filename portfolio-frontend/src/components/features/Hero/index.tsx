@@ -4,7 +4,7 @@ import { ArrowDown, Mail, FolderGit2 } from 'lucide-react'
 import { personalInfo } from '@/constants/personal-info'
 import { fadeInUp, staggerContainer, scaleIn } from '@/constants/animations'
 import { Button } from '@/components/ui/button'
-import TypewriterText from './_components/TypewriterText'
+import AnimatedName from './_components/AnimatedName'
 
 const SCROLL_DELAY_MS = 500
 
@@ -48,11 +48,7 @@ export default function Hero() {
           variants={fadeInUp}
           className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          <TypewriterText
-            text={personalInfo.name}
-            className="bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent"
-            delay={300}
-          />
+          <AnimatedName text={personalInfo.name} delay={300} />
         </motion.h1>
 
         <motion.p
