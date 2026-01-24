@@ -10,8 +10,8 @@ export default function About() {
   const locale = i18n.language as 'fr' | 'en'
 
   return (
-    <section id="about" className="bg-muted/30 py-20">
-      <div className="container mx-auto px-4">
+    <section id="about" className="flex h-screen snap-start items-center bg-muted/30">
+      <div className="container mx-auto px-4 py-20">
         <motion.div
           variants={staggerContainer}
           initial="hidden"

@@ -8,8 +8,8 @@ export default function Experience() {
   const { t } = useTranslation()
 
   return (
-    <section id="experience" className="py-20">
-      <div className="container mx-auto px-4">
+    <section id="experience" className="flex h-screen snap-start items-center">
+      <div className="container mx-auto px-4 py-20">
         <motion.div
           variants={staggerContainer}
           initial="hidden"

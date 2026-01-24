@@ -22,8 +22,8 @@ export default function Blog() {
   const hasArticles = data && data.items.length > 0
 
   return (
-    <section id="blog" className="py-20">
-      <div className="container mx-auto px-4">
+    <section id="blog" className="flex h-screen snap-start items-center">
+      <div className="container mx-auto px-4 py-20">
         <motion.div
           variants={staggerContainer}
           initial="hidden"

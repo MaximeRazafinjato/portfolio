@@ -24,7 +24,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden"
+      className="relative flex h-screen snap-start items-center justify-center overflow-hidden"
     >
       <div className="absolute inset-0 -z-10">
         <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />

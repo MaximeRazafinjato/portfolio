@@ -8,8 +8,8 @@ export default function Projects() {
   const { t } = useTranslation()
 
   return (
-    <section id="projects" className="bg-muted/30 py-20">
-      <div className="container mx-auto px-4">
+    <section id="projects" className="flex h-screen snap-start items-center bg-muted/30">
+      <div className="container mx-auto px-4 py-20">
         <motion.div
           variants={staggerContainer}
           initial="hidden"

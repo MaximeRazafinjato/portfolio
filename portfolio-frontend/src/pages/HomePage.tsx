@@ -9,7 +9,7 @@ import SEO from '@/components/common/SEO'
 
 export default function HomePage() {
   return (
-    <>
+    <div className="h-screen snap-y snap-mandatory overflow-y-auto">
       <SEO url="/" />
       <Hero />
       <About />
@@ -18,6 +18,6 @@ export default function HomePage() {
       <Skills />
       <Blog />
       <Contact />
-    </>
+    </div>
   )
 }

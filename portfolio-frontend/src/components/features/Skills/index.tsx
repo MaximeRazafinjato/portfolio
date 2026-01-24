@@ -10,8 +10,8 @@ export default function Skills() {
   const locale = i18n.language as 'fr' | 'en'
 
   return (
-    <section id="skills" className="py-20">
-      <div className="container mx-auto px-4">
+    <section id="skills" className="flex h-screen snap-start items-center">
+      <div className="container mx-auto px-4 py-20">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
