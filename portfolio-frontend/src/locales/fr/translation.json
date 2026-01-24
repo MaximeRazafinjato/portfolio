@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "about": "À propos",
+    "experience": "Expériences",
+    "projects": "Projets",
+    "skills": "Compétences",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Bonjour, je suis",
+    "title": "Responsable QA & Développeur Full-Stack",
+    "subtitle": "Je mets un point d'honneur à livrer un produit surpassant les attentes. Mon approche allie expertise technique et richesse culturelle pour des solutions innovantes et adaptées.",
+    "cta": {
+      "contact": "Me contacter",
+      "projects": "Voir mes projets"
+    }
+  },
+  "about": {
+    "title": "À propos",
+    "description": "Profil polyvalent alliant développement, assurance qualité et gestion de projet. Mon parcours international m'a permis de développer une vision globale et une grande adaptabilité.",
+    "timeline": {
+      "title": "Mon parcours international"
+    },
+    "languages": {
+      "title": "Langues",
+      "native": "Langue maternelle",
+      "fluent": "Courant",
+      "intermediate": "Intermédiaire",
+      "basic": "Notions"
+    }
+  },
+  "experience": {
+    "title": "Expériences",
+    "present": "Aujourd'hui"
+  },
+  "projects": {
+    "title": "Projets",
+    "viewCode": "Voir le code",
+    "viewDemo": "Voir la démo"
+  },
+  "skills": {
+    "title": "Compétences",
+    "categories": {
+      "development": "Développement",
+      "testing": "Test",
+      "devops": "DevOps / CI-CD",
+      "cloud": "Cloud / IA",
+      "management": "Gestion de projet",
+      "tools": "Outils",
+      "softSkills": "Soft Skills"
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Lire la suite",
+    "readTime": "{{minutes}} min de lecture",
+    "noArticles": "Aucun article pour le moment.",
+    "backToList": "Retour au blog"
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Une question, une proposition ? N'hésitez pas à me contacter.",
+    "form": {
+      "name": "Nom",
+      "email": "Email",
+      "subject": "Sujet",
+      "message": "Message",
+      "submit": "Envoyer",
+      "sending": "Envoi en cours...",
+      "success": "Message envoyé avec succès !",
+      "error": "Une erreur est survenue. Veuillez réessayer."
+    }
+  },
+  "footer": {
+    "rights": "Tous droits réservés"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue"
+  }
+}
