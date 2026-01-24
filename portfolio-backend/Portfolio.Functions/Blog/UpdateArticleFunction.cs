@@ -9,7 +9,7 @@ public class UpdateArticleFunction(UpdateArticleService service)
 {
     [Function("UpdateArticle")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "put", Route = "articles/{id:guid}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "articles/{id:guid}")] HttpRequest req,
         Guid id,
         CancellationToken cancellationToken)
     {

@@ -9,7 +9,7 @@ public class CreateArticleFunction(CreateArticleService service)
 {
     [Function("CreateArticle")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "articles")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "articles")] HttpRequest req,
         CancellationToken cancellationToken)
     {
         var model = await req.ReadFromJsonAsync<CreateArticleModel>(cancellationToken);

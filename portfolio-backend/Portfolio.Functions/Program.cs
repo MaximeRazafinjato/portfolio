@@ -4,11 +4,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Portfolio.Application;
+using Portfolio.Functions.Auth;
 using Portfolio.Infrastructure;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
+
+builder.UseMiddleware<ExceptionHandlingMiddleware>();
+builder.UseMiddleware<JwtAuthenticationMiddleware>();
 
 var connectionString = builder.Configuration.GetConnectionString("PortfolioDb")
     ?? throw new InvalidOperationException("Connection string 'PortfolioDb' not found");
@@ -17,7 +21,8 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights()
     .AddInfrastructure(connectionString)
-    .AddApplication();
+    .AddApplication()
+    .AddSingleton<IJwtValidationService, JwtValidationService>();
 
 builder.Services.AddCors(options =>
 {

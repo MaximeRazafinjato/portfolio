@@ -9,7 +9,7 @@ public class DeleteArticleFunction(DeleteArticleService service)
 {
     [Function("DeleteArticle")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "articles/{id:guid}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "articles/{id:guid}")] HttpRequest req,
         Guid id,
         CancellationToken cancellationToken)
     {
