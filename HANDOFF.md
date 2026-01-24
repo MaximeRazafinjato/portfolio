@@ -89,8 +89,99 @@ portfolio-frontend/src/
 - Footer avec liens sociaux (GitHub, LinkedIn, Email)
 - Animations Framer Motion partout (fadeInUp, staggerContainer, scaleIn)
 
+### ✅ Phase 3 - Backend Azure Functions (TERMINÉE)
+
+**Structure du projet backend :**
+
+```
+portfolio-backend/
+├── Portfolio.sln                          # Solution .NET 9
+├── Portfolio.Core/                        # Couche Domaine
+│   ├── Common/
+│   │   ├── BaseEntity.cs                  # Entité de base (Id, CreatedAt, UpdatedAt)
+│   │   ├── Result.cs                      # Result pattern pour gestion erreurs
+│   │   ├── PaginatedResult.cs             # Résultat paginé générique
+│   │   ├── IService.cs                    # Interface marqueur pour services
+│   │   ├── IValidator.cs                  # Interface pour validateurs
+│   │   └── IUnitOfWork.cs                 # Interfaces Unit of Work
+│   ├── Blog/
+│   │   ├── Article.cs                     # Entité Article (bilingue FR/EN)
+│   │   └── IArticleRepository.cs          # Interface repository
+│   └── Contact/
+│       ├── ContactMessage.cs              # Entité message de contact
+│       └── IContactMessageRepository.cs   # Interface repository
+├── Portfolio.Application/                 # Couche Services Métier
+│   ├── Blog/
+│   │   ├── GetArticles/
+│   │   │   ├── ArticleListModel.cs
+│   │   │   └── GetArticlesService.cs
+│   │   ├── GetArticleBySlug/
+│   │   │   ├── ArticleDetailModel.cs
+│   │   │   └── GetArticleBySlugService.cs
+│   │   ├── CreateArticle/
+│   │   │   ├── CreateArticleModel.cs
+│   │   │   ├── CreateArticleService.cs
+│   │   │   └── CreateArticleValidator.cs  # Validateur séparé
+│   │   ├── UpdateArticle/
+│   │   │   ├── UpdateArticleModel.cs
+│   │   │   ├── UpdateArticleService.cs
+│   │   │   └── UpdateArticleValidator.cs  # Validateur séparé
+│   │   └── DeleteArticle/
+│   │       └── DeleteArticleService.cs
+│   ├── Contact/
+│   │   └── SendContact/
+│   │       ├── SendContactModel.cs
+│   │       ├── SendContactService.cs
+│   │       └── SendContactValidator.cs    # Validateur séparé
+│   └── DependencyInjection.cs
+├── Portfolio.Infrastructure/              # Couche Persistance
+│   ├── Data/
+│   │   ├── PortfolioDbContext.cs
+│   │   ├── PortfolioDbContextFactory.cs
+│   │   ├── UnitOfWork.cs                  # Implémentation Unit of Work
+│   │   └── Migrations/
+│   │       └── InitialCreate.cs
+│   ├── Repositories/
+│   │   ├── ArticleRepository.cs
+│   │   └── ContactMessageRepository.cs
+│   └── DependencyInjection.cs
+└── Portfolio.Functions/                   # Azure Functions (API)
+    ├── Blog/
+    │   ├── GetArticlesFunction.cs         # GET /api/articles
+    │   ├── GetArticleBySlugFunction.cs    # GET /api/articles/{slug}
+    │   ├── CreateArticleFunction.cs       # POST /api/articles (auth)
+    │   ├── UpdateArticleFunction.cs       # PUT /api/articles/{id} (auth)
+    │   └── DeleteArticleFunction.cs       # DELETE /api/articles/{id} (auth)
+    ├── Contact/
+    │   └── SendContactFunction.cs         # POST /api/contact
+    ├── Program.cs
+    ├── host.json
+    └── local.settings.json
+```
+
+**API Endpoints :**
+
+| Méthode | Route | Auth | Description |
+|---------|-------|------|-------------|
+| GET | `/api/articles` | Non | Liste paginée des articles publiés |
+| GET | `/api/articles/{slug}` | Non | Détail d'un article par slug |
+| POST | `/api/articles` | Oui | Créer un nouvel article |
+| PUT | `/api/articles/{id}` | Oui | Modifier un article existant |
+| DELETE | `/api/articles/{id}` | Oui | Supprimer un article |
+| POST | `/api/contact` | Non | Envoyer un message de contact |
+
+**Technologies et patterns utilisés :**
+- .NET 9 Isolated Worker
+- Entity Framework Core 9 + SQL Server
+- Clean Architecture (Core/Application/Infrastructure/Functions)
+- **Pattern Service + Validator séparé** (conforme BACKEND_ARCHITECTURE.md)
+- **Pattern Unit of Work** pour la gestion transactionnelle
+- **Result pattern** pour la gestion des erreurs
+- Interfaces `IService` et `IValidator<T>` pour l'injection
+- Méthodes repository nommées `GetOrDefaultAsync` (convention)
+- Messages d'erreur en français
+
 ### ❌ Phases restantes
-- **Phase 3** : Backend - Azure Functions (.NET 9)
 - **Phase 4** : Frontend - Admin (Blog editor)
 - **Phase 5** : Page détail Blog
 - **Phase 6** : Polish & Optimisations
@@ -101,6 +192,7 @@ portfolio-frontend/src/
 
 ## Ce qui a fonctionné
 
+### Frontend
 1. **pnpm** : Gestionnaire de paquets utilisé selon les guidelines
 2. **ShadCN UI init** : Nécessitait d'abord configurer Tailwind et les alias tsconfig
 3. **Tailwind CSS v4** : Utilise `@import "tailwindcss"` et `@tailwindcss/vite` plugin
@@ -109,43 +201,82 @@ portfolio-frontend/src/
 6. **Framer Motion** : Animations fluides avec variants réutilisables
 7. **TypeScript** : Build sans erreurs
 
+### Backend
+1. **Azure Functions .NET 9** : Template installé via `dotnet new install Microsoft.Azure.Functions.Worker.ProjectTemplates`
+2. **Clean Architecture** : Séparation Core/Application/Infrastructure/Functions
+3. **EF Core 9** : Migrations design-time avec `IDesignTimeDbContextFactory`
+4. **Articles bilingues** : Champs Title/Content/Excerpt en FR et EN
+5. **Pattern Service + Validator** : Validateurs dans des fichiers séparés (conforme BACKEND_ARCHITECTURE.md)
+6. **Unit of Work** : Gestion transactionnelle propre avec `IUnitOfWorkManager`
+7. **Result pattern** : Classes `Result` et `Result<T>` dans Core/Common
+8. **Convention nommage repository** : `GetOrDefaultAsync` pour les retours nullables
+
 ---
 
 ## Ce qui n'a pas fonctionné
 
+### Frontend
 1. **ShadCN init sans config préalable** : Erreur si Tailwind et alias tsconfig ne sont pas configurés d'abord
 2. **Toast component** : Déprécié, utiliser `sonner` à la place
 3. **Options shadcn obsolètes** : `--style` n'existe plus, utiliser `-t vite -b neutral`
+
+### Backend
+1. **Template Azure Functions** : Options `-f` et `--worker` n'existent pas, utiliser `-F` pour le framework
+2. **EF Core migrations** : Nécessite `IDesignTimeDbContextFactory` car la connection string n'est pas disponible au design-time
+3. **Result avec héritage** : `protected init` nécessaire pour les propriétés partagées entre `Result` et `Result<T>`
 
 ---
 
 ## Prochaines étapes
 
-### Phase 3 - Backend Azure Functions (PRIORITAIRE)
+### Phase 4 - Frontend Admin (Blog editor)
 
-1. **Setup projet .NET 9**
-   - Créer `portfolio-backend/` avec Azure Functions
-   - Configurer Entity Framework Core + Azure SQL
-   - Configurer Auth0 pour authentification JWT
+1. **Routes protégées Auth0**
+   - Guard d'authentification
+   - `/admin` - Dashboard (liste articles)
+   - `/admin/blog/new` - Créer article
+   - `/admin/blog/:id/edit` - Éditer article
 
-2. **API Blog**
-   - `GET /api/articles` - Liste des articles publiés
-   - `GET /api/articles/{slug}` - Détail article
-   - `POST /api/articles` - Créer article (admin)
-   - `PUT /api/articles/{id}` - Modifier article (admin)
-   - `DELETE /api/articles/{id}` - Supprimer article (admin)
+2. **BlogEditor Component**
+   - Formulaire complet (titre FR/EN, contenu FR/EN, etc.)
+   - Éditeur Markdown avec preview
+   - Upload image de couverture
+   - Gestion des tags
+   - Boutons publier/sauvegarder brouillon
 
-3. **API Contact**
-   - `POST /api/contact` - Envoyer message (stockage + email notification)
+3. **Intégration API**
+   - React Query mutations pour CRUD articles
+   - Gestion des états loading/error
 
-### Commandes pour continuer
+---
 
+## Commandes pour développer
+
+### Frontend
 ```bash
 cd D:\Projects\FTEL\cv\portfolio-frontend
 pnpm dev
+# Site accessible sur http://localhost:5173
 ```
 
-Le site est accessible sur http://localhost:5173
+### Backend
+```bash
+cd D:\Projects\FTEL\cv\portfolio-backend
+
+# Build
+dotnet build
+
+# Lancer Azure Functions localement
+cd Portfolio.Functions
+func start
+# API accessible sur http://localhost:7071
+
+# Créer une migration EF Core
+dotnet ef migrations add NomMigration --project Portfolio.Infrastructure --startup-project Portfolio.Functions --output-dir Data/Migrations
+
+# Appliquer les migrations
+dotnet ef database update --project Portfolio.Infrastructure --startup-project Portfolio.Functions
+```
 
 ---
 
@@ -155,34 +286,58 @@ Le site est accessible sur http://localhost:5173
 |---------|-------------|
 | `PLAN_PORTFOLIO.md` | Plan complet du contenu et specs techniques |
 | `IMPLEMENTATION_PLAN.md` | Plan d'implémentation détaillé en 8 phases |
-| `src/constants/*.ts` | Toutes les données (expériences, projets, skills) |
-| `src/locales/*/translation.json` | Traductions FR/EN |
-| `src/index.css` | Thème violet avec variables CSS |
-| `src/constants/animations.ts` | Variants Framer Motion réutilisables |
+| `portfolio-frontend/src/constants/*.ts` | Données frontend (expériences, projets, skills) |
+| `portfolio-frontend/src/locales/*/translation.json` | Traductions FR/EN |
+| `portfolio-frontend/src/index.css` | Thème violet avec variables CSS |
+| `portfolio-backend/Portfolio.Functions/local.settings.json` | Config locale backend (Auth0, DB) |
 
 ---
 
 ## Décisions techniques prises
 
+### Frontend
 1. **React Router v7** avec lazy loading pour les pages
 2. **Tailwind CSS v4** avec plugin Vite (pas de tailwind.config.js)
 3. **ShadCN UI** style New York, base neutral customisé en violet
 4. **Framer Motion** pour les animations (variants déjà définis dans `constants/animations.ts`)
 5. **i18next** avec détection automatique de langue (localStorage + navigator)
-6. **Auth0** pour l'authentification admin (à configurer avec les vraies credentials)
-7. **Azure Functions** pour le backend (Phase 3)
-8. **Structure des composants** : un composant par fichier, sous-composants dans `_components/`
-9. **Lucide React** pour les icônes
-10. **Sonner** pour les notifications toast
+6. **Lucide React** pour les icônes
+7. **Sonner** pour les notifications toast
+
+### Backend
+1. **Azure Functions Isolated Worker** (.NET 9)
+2. **Clean Architecture** simplifiée (4 couches)
+3. **EF Core 9** avec SQL Server
+4. **Articles bilingues** (champs FR/EN pour titre, contenu, extrait)
+5. **Tags stockés** en string séparé par virgules (simplification)
+6. **Auth0** pour l'authentification admin (à configurer avec credentials)
+7. **Génération automatique de slug** à partir du titre
+8. **Validation métier** dans les services avec Result pattern
+
+---
+
+## Configuration Auth0 requise
+
+Dans `local.settings.json` du backend, remplacer :
+```json
+{
+  "Auth0": {
+    "Domain": "YOUR_AUTH0_DOMAIN.auth0.com",
+    "Audience": "YOUR_AUTH0_API_IDENTIFIER"
+  }
+}
+```
+
+Dans le frontend, configurer les variables d'environnement Auth0 dans `.env`.
 
 ---
 
 ## Notes pour le prochain agent
 
-- Lire le module `~/.claude/modules/FRONTEND_ARCHITECTURE.md` avant de coder
+- Lire le module `~/.claude/modules/FRONTEND_ARCHITECTURE.md` avant de coder le frontend
+- Lire le module `~/.claude/modules/BACKEND_ARCHITECTURE.md` pour référence (adapté à Azure Functions)
 - Utiliser Context7 MCP pour la documentation des librairies
-- Utiliser `pnpm` (pas npm/yarn)
-- Les données sont déjà dans `src/constants/` - pas besoin de les recréer
-- Le thème violet est configuré via CSS variables OKLCH
-- Les animations Framer Motion sont dans `src/constants/animations.ts`
-- Structure : un composant par fichier, sous-composants dans `_components/`
+- Utiliser `pnpm` pour le frontend (pas npm/yarn)
+- Le backend est en .NET 9 avec Azure Functions
+- Les articles sont bilingues (FR/EN) - champs séparés, pas de système de traduction dynamique
+- L'authentification Auth0 n'est pas encore complètement implémentée côté backend (middleware JWT à ajouter)
