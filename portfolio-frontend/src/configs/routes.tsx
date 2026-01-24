@@ -8,6 +8,7 @@ const BlogDetailPage = lazy(() => import('@/pages/BlogDetailPage'))
 const AdminLayout = lazy(() => import('@/components/features/Admin/AdminLayout'))
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'))
 const AdminBlogEditor = lazy(() => import('@/pages/admin/AdminBlogEditor'))
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 function PageLoader() {
   return (
@@ -61,5 +62,9 @@ export const router = createBrowserRouter([
         element: withSuspense(AdminBlogEditor),
       },
     ],
+  },
+  {
+    path: '*',
+    element: withSuspense(NotFoundPage),
   },
 ])

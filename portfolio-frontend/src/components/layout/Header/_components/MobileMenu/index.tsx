@@ -42,13 +42,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          id="mobile-menu"
           variants={menuVariants}
           initial="closed"
           animate="open"
           exit="closed"
           className="absolute left-0 right-0 top-full overflow-hidden border-b bg-background/95 backdrop-blur-md md:hidden"
         >
-          <nav className="container flex flex-col gap-2 px-4 py-4">
+          <nav className="container flex flex-col gap-2 px-4 py-4" aria-label={t('accessibility.mainNavigation')}>
             {navItems.map((item) => {
               const isAnchor = item.href.startsWith('#')
               const className = "rounded-md px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-primary"

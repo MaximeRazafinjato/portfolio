@@ -260,8 +260,51 @@ portfolio-frontend/src/
 - remark-gfm 4.0.1
 - rehype-highlight 7.0.2
 
+### ✅ Phase 6 - Polish & Optimisations (TERMINÉE)
+
+**Composants créés :**
+
+```
+portfolio-frontend/src/
+├── components/common/
+│   ├── SEO/index.tsx                    # Meta tags dynamiques (OG, Twitter, article)
+│   ├── ScrollToTop/index.tsx            # Scroll to top sur changement de route
+│   ├── ReadingProgressBar/index.tsx     # Barre de progression lecture articles
+│   └── SkipLink/index.tsx               # Skip link accessibilité
+└── pages/
+    └── NotFoundPage.tsx                 # Page 404 personnalisée
+```
+
+**Fonctionnalités implémentées :**
+
+1. **SEO & Meta tags**
+   - Composant `SEO` réutilisable avec react-helmet-async
+   - Meta tags Open Graph et Twitter Cards
+   - Support articles (publishedTime, modifiedTime, tags)
+   - Traductions bilingues FR/EN
+   - Canonical URLs
+
+2. **Page 404**
+   - Design cohérent avec thème violet
+   - Animations Framer Motion
+   - Boutons "Retour accueil" et "Page précédente"
+   - noIndex pour SEO
+
+3. **UX Améliorations**
+   - ScrollToTop automatique sur changement de route
+   - Progress bar de lecture sur les articles (Framer Motion spring)
+
+4. **Accessibilité**
+   - Skip link "Aller au contenu principal"
+   - ARIA labels traduits sur Header, Footer, ThemeToggle, LanguageSwitch
+   - aria-expanded et aria-controls sur menu mobile
+   - id="main-content" avec tabIndex pour focus management
+   - Navigation landmarks avec aria-label
+
+**Packages ajoutés :**
+- react-helmet-async 2.0.5
+
 ### ❌ Phases restantes
-- **Phase 6** : Polish & Optimisations
 - **Phase 7** : Déploiement Azure
 - **Phase 8** : Contenu (données, traductions, assets)
 

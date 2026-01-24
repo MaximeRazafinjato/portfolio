@@ -5,10 +5,12 @@ import Projects from '@/components/features/Projects'
 import Skills from '@/components/features/Skills'
 import Blog from '@/components/features/Blog'
 import Contact from '@/components/features/Contact'
+import SEO from '@/components/common/SEO'
 
 export default function HomePage() {
   return (
     <>
+      <SEO url="/" />
       <Hero />
       <About />
       <Experience />

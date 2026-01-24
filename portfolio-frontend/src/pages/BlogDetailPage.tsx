@@ -10,6 +10,8 @@ import { fadeInUp, staggerContainer } from '@/constants/animations'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
+import SEO from '@/components/common/SEO'
+import ReadingProgressBar from '@/components/common/ReadingProgressBar'
 
 import 'highlight.js/styles/github-dark.css'
 
@@ -58,11 +60,24 @@ export default function BlogDetailPage() {
 
   const title = locale === 'fr' ? article.title : article.titleEn
   const content = locale === 'fr' ? article.content : article.contentEn
+  const excerpt = locale === 'fr' ? article.excerpt : article.excerptEn
   const displayDate = article.publishedAt || article.createdAt
   const readTime = estimateReadTime(content)
 
   return (
-    <div className="min-h-screen pt-20">
+    <>
+      <SEO
+        title={title}
+        description={excerpt || undefined}
+        url={`/blog/${article.slug}`}
+        image={article.coverImageUrl || undefined}
+        type="article"
+        publishedTime={article.publishedAt || undefined}
+        modifiedTime={article.updatedAt}
+        tags={article.tags}
+      />
+      <ReadingProgressBar />
+      <div className="min-h-screen pt-20">
       <motion.article
         className="container mx-auto px-4 py-12"
         variants={staggerContainer}
@@ -132,6 +147,7 @@ export default function BlogDetailPage() {
         </motion.div>
       </motion.article>
     </div>
+    </>
   )
 }
 

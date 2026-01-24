@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { navItems } from '@/constants/navigation'
@@ -12,6 +13,7 @@ import MobileMenu from './_components/MobileMenu'
 const SCROLL_THRESHOLD = 50
 
 export default function Header() {
+  const { t } = useTranslation()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -53,7 +55,7 @@ export default function Header() {
           {personalInfo.name.split(' ')[0]}
         </motion.a>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 md:flex" aria-label={t('accessibility.mainNavigation')}>
           {navItems.map((item) => (
             <NavLink key={item.id} href={item.href} labelKey={item.labelKey} />
           ))}
@@ -69,7 +71,9 @@ export default function Header() {
           size="icon"
           className="md:hidden"
           onClick={toggleMobileMenu}
-          aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
+          aria-label={isMobileMenuOpen ? t('accessibility.closeMenu') : t('accessibility.openMenu')}
         >
           {isMobileMenuOpen ? (
             <X className="h-5 w-5" />

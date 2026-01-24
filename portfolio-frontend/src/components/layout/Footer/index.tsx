@@ -39,7 +39,7 @@ export default function Footer() {
       className="border-t bg-background py-8"
     >
       <div className="container mx-auto flex flex-col items-center gap-4 px-4">
-        <div className="flex items-center gap-4">
+        <nav className="flex items-center gap-4" aria-label={t('accessibility.socialLinks')}>
           {socialLinks.map(({ id, href, icon: Icon, label }) => (
             <motion.a
               key={id}
@@ -54,7 +54,7 @@ export default function Footer() {
               <Icon className="h-5 w-5" />
             </motion.a>
           ))}
-        </div>
+        </nav>
 
         <p className="text-center text-sm text-muted-foreground">
           &copy; {CURRENT_YEAR} {personalInfo.name}. {t('footer.rights')}

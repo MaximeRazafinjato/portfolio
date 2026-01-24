@@ -1,4 +1,12 @@
 {
+  "seo": {
+    "defaultTitle": "QA Lead & Full-Stack Developer",
+    "defaultDescription": "Portfolio of Maxime Razafinjato - QA Lead and Full-Stack Developer with international expertise in quality assurance, web development and project management.",
+    "blogTitle": "Blog",
+    "blogDescription": "Articles and thoughts on web development, quality assurance and development best practices.",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page you are looking for does not exist or has been moved."
+  },
   "nav": {
     "about": "About",
     "experience": "Experience",
@@ -79,5 +87,20 @@
   "common": {
     "loading": "Loading...",
     "error": "An error occurred"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to home",
+    "goBack": "Go back"
+  },
+  "accessibility": {
+    "skipToContent": "Skip to main content",
+    "mainNavigation": "Main navigation",
+    "toggleTheme": "Toggle theme",
+    "toggleLanguage": "Change language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "socialLinks": "Social links"
   }
 }

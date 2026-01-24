@@ -1,9 +1,11 @@
 import { Moon, Sun } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/contexts/ThemeContext'
 import { Button } from '@/components/ui/button'
 
 export default function ThemeToggle() {
+  const { t } = useTranslation()
   const { theme, toggleTheme } = useTheme()
 
   return (
@@ -12,7 +14,7 @@ export default function ThemeToggle() {
       size="icon"
       onClick={toggleTheme}
       className="relative"
-      aria-label={theme === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'}
+      aria-label={t('accessibility.toggleTheme')}
     >
       <motion.div
         initial={false}

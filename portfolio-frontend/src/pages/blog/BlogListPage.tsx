@@ -5,6 +5,7 @@ import { fadeInUp, staggerContainer } from '@/constants/animations'
 import { useArticlesQuery } from '@/domains/blog'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
+import SEO from '@/components/common/SEO'
 import ArticleCard from './_components/ArticleCard'
 
 const PAGE_SIZE = 6
@@ -30,9 +31,15 @@ export default function BlogListPage() {
   }
 
   return (
-    <div className="min-h-screen pt-20">
-      <div className="container mx-auto px-4 py-12">
-        <motion.div
+    <>
+      <SEO
+        title={t('seo.blogTitle')}
+        description={t('seo.blogDescription')}
+        url="/blog"
+      />
+      <div className="min-h-screen pt-20">
+        <div className="container mx-auto px-4 py-12">
+          <motion.div
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
@@ -98,9 +105,10 @@ export default function BlogListPage() {
               )}
             </>
           )}
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

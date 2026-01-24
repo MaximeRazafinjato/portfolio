@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { Auth0Provider } from '@auth0/auth0-react'
+import { HelmetProvider } from 'react-helmet-async'
 
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { QueryClientProvider } from '@/contexts/QueryClientProvider'
@@ -13,12 +14,14 @@ import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Auth0Provider {...auth0Config}>
-      <QueryClientProvider>
-        <ThemeProvider>
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </Auth0Provider>
+    <HelmetProvider>
+      <Auth0Provider {...auth0Config}>
+        <QueryClientProvider>
+          <ThemeProvider>
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </Auth0Provider>
+    </HelmetProvider>
   </StrictMode>,
 )

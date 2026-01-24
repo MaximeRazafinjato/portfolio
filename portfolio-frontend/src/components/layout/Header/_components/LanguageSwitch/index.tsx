@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 
 export default function LanguageSwitch() {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const locale = i18n.language as 'fr' | 'en'
 
   const handleToggle = () => {
@@ -15,7 +15,7 @@ export default function LanguageSwitch() {
       size="sm"
       onClick={handleToggle}
       className="font-medium"
-      aria-label={locale === 'fr' ? 'Switch to English' : 'Passer en Français'}
+      aria-label={t('accessibility.toggleLanguage')}
     >
       {locale === 'fr' ? 'EN' : 'FR'}
     </Button>

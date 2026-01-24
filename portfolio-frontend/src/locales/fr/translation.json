@@ -1,4 +1,12 @@
 {
+  "seo": {
+    "defaultTitle": "Responsable QA & Développeur Full-Stack",
+    "defaultDescription": "Portfolio de Maxime Razafinjato - Responsable QA et Développeur Full-Stack avec expertise internationale en assurance qualité, développement web et gestion de projet.",
+    "blogTitle": "Blog",
+    "blogDescription": "Articles et réflexions sur le développement web, l'assurance qualité et les bonnes pratiques de développement.",
+    "notFoundTitle": "Page non trouvée",
+    "notFoundDescription": "La page que vous recherchez n'existe pas ou a été déplacée."
+  },
   "nav": {
     "about": "À propos",
     "experience": "Expériences",
@@ -79,5 +87,20 @@
   "common": {
     "loading": "Chargement...",
     "error": "Une erreur est survenue"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'accueil",
+    "goBack": "Page précédente"
+  },
+  "accessibility": {
+    "skipToContent": "Aller au contenu principal",
+    "mainNavigation": "Navigation principale",
+    "toggleTheme": "Changer de thème",
+    "toggleLanguage": "Changer de langue",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "socialLinks": "Liens sociaux"
   }
 }
