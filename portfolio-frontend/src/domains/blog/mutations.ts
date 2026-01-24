@@ -50,8 +50,7 @@ export function useTogglePublishMutation() {
 
   return useMutation({
     mutationFn: async ({ id, isPublished }: { id: string; isPublished: boolean }) => {
-      const response = await api.put<ArticleDetail>(API_ENDPOINTS.articleById(id), { isPublished })
-      return response.data
+      await api.patch(API_ENDPOINTS.articlePublish(id), { isPublished })
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: BLOG_QUERY_KEYS.all })

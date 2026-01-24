@@ -21,5 +21,6 @@ export const API_ENDPOINTS = {
   articles: '/articles',
   articleBySlug: (slug: string) => `/articles/${slug}`,
   articleById: (id: string) => `/articles/${id}`,
+  articlePublish: (id: string) => `/articles/${id}/publish`,
   contact: '/contact',
 } as const
