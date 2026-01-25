@@ -38,4 +38,3 @@ builder.Services.AddCors(options =>
 });
 
 builder.Build().Run();
-// trigger deploy
