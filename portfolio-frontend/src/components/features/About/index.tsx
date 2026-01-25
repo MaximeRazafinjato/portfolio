@@ -1,13 +1,55 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { personalInfo, timeline } from '@/constants/personal-info'
+import { personalInfo as staticPersonalInfo, timeline as staticTimeline } from '@/constants/personal-info'
 import { fadeInUp, staggerContainer } from '@/constants/animations'
+import { useEducationQuery } from '@/domains/career'
+import { useLanguagesQuery } from '@/domains/profile'
+import { getYearFromDate } from '@/utils/formatters'
 import TimelineItem from './_components/TimelineItem'
 import LanguageCard from './_components/LanguageCard'
+
+const LEVEL_MAP: Record<string, 'native' | 'fluent' | 'advanced' | 'intermediate' | 'basic'> = {
+  Native: 'native',
+  Fluent: 'fluent',
+  Advanced: 'advanced',
+  Intermediate: 'intermediate',
+  Basic: 'basic',
+}
 
 export default function About() {
   const { t, i18n } = useTranslation()
   const locale = i18n.language as 'fr' | 'en'
+
+  const { data: apiEducation } = useEducationQuery()
+  const { data: apiLanguages } = useLanguagesQuery()
+
+  const timelineItems = apiEducation?.length
+    ? apiEducation.map((edu) => ({
+        year: edu.periodEnd
+          ? `${getYearFromDate(edu.periodStart)}-${getYearFromDate(edu.periodEnd)}`
+          : `${getYearFromDate(edu.periodStart)}-now`,
+        location: locale === 'fr' ? edu.locationFr : edu.locationEn,
+        description: locale === 'fr' ? edu.descriptionFr : edu.descriptionEn,
+        flag: edu.flagEmoji || '',
+      }))
+    : staticTimeline.map((item) => ({
+        year: item.year,
+        location: item.location[locale],
+        description: item.description[locale],
+        flag: item.flag,
+      }))
+
+  const languageItems = apiLanguages?.length
+    ? apiLanguages.map((lang, index) => ({
+        id: lang.id || `api-${index}`,
+        name: locale === 'fr' ? lang.nameFr : lang.nameEn,
+        level: LEVEL_MAP[lang.level] || 'intermediate',
+      }))
+    : staticPersonalInfo.languages.map((lang, index) => ({
+        id: `static-${index}`,
+        name: lang.name[locale],
+        level: lang.level as 'native' | 'fluent' | 'intermediate' | 'basic',
+      }))
 
   return (
     <section id="about" className="flex h-screen snap-start items-center bg-muted/30">
@@ -38,14 +80,14 @@ export default function About() {
                 {t('about.timeline.title')}
               </h3>
               <div>
-                {timeline.map((item, index) => (
+                {timelineItems.map((item, index) => (
                   <TimelineItem
                     key={item.year}
                     year={item.year}
-                    location={item.location[locale]}
-                    description={item.description[locale]}
+                    location={item.location}
+                    description={item.description}
                     flag={item.flag}
-                    isLast={index === timeline.length - 1}
+                    isLast={index === timelineItems.length - 1}
                   />
                 ))}
               </div>
@@ -55,18 +97,15 @@ export default function About() {
               <h3 className="mb-6 text-xl font-semibold">
                 {t('about.languages.title')}
               </h3>
-              <motion.div
-                variants={staggerContainer}
-                className="grid gap-3 sm:grid-cols-2"
-              >
-                {personalInfo.languages.map((lang) => (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {languageItems.map((lang) => (
                   <LanguageCard
-                    key={lang.name.en}
-                    name={lang.name[locale]}
-                    level={lang.level as 'native' | 'fluent' | 'intermediate' | 'basic'}
+                    key={lang.id}
+                    name={lang.name}
+                    level={lang.level}
                   />
                 ))}
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </motion.div>

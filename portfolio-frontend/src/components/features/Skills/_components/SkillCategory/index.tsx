@@ -12,10 +12,14 @@ interface SkillCategoryProps {
 export default function SkillCategory({ category }: SkillCategoryProps) {
   const { t } = useTranslation()
 
+  const displayName = category.nameKey.startsWith('skills.')
+    ? t(category.nameKey)
+    : category.nameKey
+
   return (
     <motion.div variants={fadeInUp} className="rounded-xl border bg-card p-4">
       <h3 className="mb-3 font-semibold text-primary">
-        {t(category.nameKey)}
+        {displayName}
       </h3>
       <motion.div
         variants={staggerContainer}

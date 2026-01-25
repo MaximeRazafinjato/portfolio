@@ -1,13 +1,35 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { technicalSkills, softSkills } from '@/constants/skills'
+import {
+  technicalSkills as staticTechnicalSkills,
+  softSkills as staticSoftSkills,
+  type SkillCategory as SkillCategoryType,
+} from '@/constants/skills'
 import { fadeInUp, staggerContainer } from '@/constants/animations'
+import { useSkillCategoriesWithSkillsQuery, useSoftSkillsQuery } from '@/domains/portfolio'
 import SkillCategory from './_components/SkillCategory'
 import SoftSkillBadge from './_components/SoftSkillBadge'
 
 export default function Skills() {
   const { t, i18n } = useTranslation()
   const locale = i18n.language as 'fr' | 'en'
+
+  const { data: apiCategories } = useSkillCategoriesWithSkillsQuery()
+  const { data: apiSoftSkills } = useSoftSkillsQuery()
+
+  const categoryItems: SkillCategoryType[] = apiCategories?.length
+    ? apiCategories.map((cat) => ({
+        id: cat.id || '',
+        nameKey: locale === 'fr' ? cat.nameFr : cat.nameEn,
+        skills: cat.skills?.map((s) => s.name) || [],
+      }))
+    : staticTechnicalSkills
+
+  const softSkillItems = apiSoftSkills?.length
+    ? apiSoftSkills.map((skill) => ({
+        name: locale === 'fr' ? skill.nameFr : skill.nameEn,
+      }))
+    : staticSoftSkills.map((skill) => ({ name: skill.name[locale] }))
 
   return (
     <section id="skills" className="flex h-screen snap-start items-center">
@@ -26,7 +48,7 @@ export default function Skills() {
           </motion.h2>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {technicalSkills.map((category) => (
+            {categoryItems.map((category) => (
               <SkillCategory key={category.id} category={category} />
             ))}
           </div>
@@ -39,8 +61,8 @@ export default function Skills() {
               variants={staggerContainer}
               className="flex flex-wrap justify-center gap-3"
             >
-              {softSkills.map((skill) => (
-                <SoftSkillBadge key={skill.name.en} name={skill.name[locale]} />
+              {softSkillItems.map((skill) => (
+                <SoftSkillBadge key={skill.name} name={skill.name} />
               ))}
             </motion.div>
           </motion.div>

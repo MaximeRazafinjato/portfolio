@@ -23,4 +23,33 @@ export const API_ENDPOINTS = {
   articleById: (id: string) => `/articles/${id}`,
   articlePublish: (id: string) => `/articles/${id}/publish`,
   contact: '/contact',
+
+  personalInfo: '/personal-info',
+
+  socialLinks: '/social-links',
+  socialLinkById: (id: string) => `/social-links/${id}`,
+
+  languages: '/languages',
+  languageById: (id: string) => `/languages/${id}`,
+
+  experiences: '/experiences',
+  experienceById: (id: string) => `/experiences/${id}`,
+
+  education: '/education',
+  educationById: (id: string) => `/education/${id}`,
+
+  skillCategories: '/skill-categories',
+  skillCategoryById: (id: string) => `/skill-categories/${id}`,
+
+  skills: '/skills',
+  skillById: (id: string) => `/skills/${id}`,
+
+  softSkills: '/soft-skills',
+  softSkillById: (id: string) => `/soft-skills/${id}`,
+
+  projects: '/projects',
+  projectById: (id: string) => `/projects/${id}`,
+
+  uploadFile: '/files/upload',
+  deleteFile: (blobName: string) => `/files/${blobName}`,
 } as const

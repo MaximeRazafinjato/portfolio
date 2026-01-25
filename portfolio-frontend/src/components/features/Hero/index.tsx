@@ -1,19 +1,28 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { ArrowDown, Mail, FolderGit2, Download } from 'lucide-react'
-import { personalInfo } from '@/constants/personal-info'
+import { personalInfo as staticPersonalInfo } from '@/constants/personal-info'
 import { fadeInUp, staggerContainer, scaleIn } from '@/constants/animations'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { usePersonalInfoQuery } from '@/domains/profile'
 import AnimatedName from './_components/AnimatedName'
 
 const SCROLL_DELAY_MS = 500
-const CV_PATH = '/cv.pdf'
-const AVATAR_IMAGE_PATH = '/avatar.jpg'
+const DEFAULT_CV_PATH = '/cv.pdf'
+const DEFAULT_AVATAR_PATH = '/avatar.jpg'
 
 export default function Hero() {
   const { t, i18n } = useTranslation()
   const locale = i18n.language as 'fr' | 'en'
+  const { data: apiPersonalInfo } = usePersonalInfoQuery()
+
+  const name = apiPersonalInfo?.name ?? staticPersonalInfo.name
+  const title = locale === 'fr'
+    ? (apiPersonalInfo?.titleFr ?? staticPersonalInfo.title.fr)
+    : (apiPersonalInfo?.titleEn ?? staticPersonalInfo.title.en)
+  const avatarUrl = apiPersonalInfo?.avatarUrl || DEFAULT_AVATAR_PATH
+  const cvUrl = apiPersonalInfo?.cvUrl || DEFAULT_CV_PATH
 
   const scrollToSection = (sectionId: string) => {
     setTimeout(() => {
@@ -42,7 +51,7 @@ export default function Hero() {
       >
         <motion.div variants={scaleIn} className="mb-6 flex justify-center">
           <Avatar className="h-32 w-32 border-4 border-primary/20 shadow-xl shadow-primary/10">
-            <AvatarImage src={AVATAR_IMAGE_PATH} alt={personalInfo.name} />
+            <AvatarImage src={avatarUrl} alt={name} />
             <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-3xl font-bold text-primary-foreground">
               MR
             </AvatarFallback>
@@ -60,14 +69,14 @@ export default function Hero() {
           variants={fadeInUp}
           className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          <AnimatedName text={personalInfo.name} delay={300} />
+          <AnimatedName text={name} delay={300} />
         </motion.h1>
 
         <motion.p
           variants={fadeInUp}
           className="mb-8 text-xl text-primary/80 sm:text-2xl"
         >
-          {personalInfo.title[locale]}
+          {title}
         </motion.p>
 
         <motion.p
@@ -104,7 +113,7 @@ export default function Hero() {
             className="gap-2"
             asChild
           >
-            <a href={CV_PATH} download>
+            <a href={cvUrl} download>
               <Download className="h-4 w-4" />
               {t('hero.cta.downloadCv')}
             </a>

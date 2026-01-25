@@ -1,11 +1,30 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { experiences } from '@/constants/experiences'
+import { experiences as staticExperiences, type Experience } from '@/constants/experiences'
 import { fadeInUp, staggerContainer } from '@/constants/animations'
+import { useExperiencesQuery } from '@/domains/career'
+import { getYearFromDate } from '@/utils/formatters'
 import ExperienceCard from './_components/ExperienceCard'
 
 export default function Experience() {
   const { t } = useTranslation()
+  const { data: apiExperiences } = useExperiencesQuery()
+
+  const experienceItems: Experience[] = apiExperiences?.length
+    ? apiExperiences.map((exp) => ({
+        id: exp.id || '',
+        company: exp.companyName,
+        companyType: { fr: '', en: '' },
+        location: { fr: exp.locationFr, en: exp.locationEn },
+        title: { fr: exp.positionFr, en: exp.positionEn },
+        period: {
+          start: getYearFromDate(exp.periodStart),
+          end: exp.isCurrent ? null : (exp.periodEnd ? getYearFromDate(exp.periodEnd) : null),
+        },
+        responsibilities: { fr: exp.responsibilitiesFr, en: exp.responsibilitiesEn },
+        technologies: exp.technologies,
+      }))
+    : staticExperiences
 
   return (
     <section id="experience" className="flex h-screen snap-start items-center">
@@ -24,7 +43,7 @@ export default function Experience() {
           </motion.h2>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            {experiences.map((experience) => (
+            {experienceItems.map((experience) => (
               <ExperienceCard key={experience.id} experience={experience} />
             ))}
           </div>
