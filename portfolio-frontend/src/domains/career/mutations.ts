@@ -8,7 +8,11 @@ export function useCreateExperienceMutation() {
 
   return useMutation({
     mutationFn: async (data: Omit<Experience, 'id'>) => {
-      const response = await api.post<{ id: string }>(API_ENDPOINTS.experiences, data)
+      const payload = {
+        ...data,
+        periodEnd: data.periodEnd || null,
+      }
+      const response = await api.post<{ id: string }>(API_ENDPOINTS.experiences, payload)
       return response.data
     },
     onSuccess: () => {
@@ -22,7 +26,11 @@ export function useUpdateExperienceMutation() {
 
   return useMutation({
     mutationFn: async ({ id, ...data }: Experience & { id: string }) => {
-      await api.put(API_ENDPOINTS.experienceById(id), data)
+      const payload = {
+        ...data,
+        periodEnd: data.periodEnd || null,
+      }
+      await api.put(API_ENDPOINTS.experienceById(id), payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CAREER_QUERY_KEYS.experiences })
@@ -48,7 +56,11 @@ export function useCreateEducationMutation() {
 
   return useMutation({
     mutationFn: async (data: Omit<Education, 'id'>) => {
-      const response = await api.post<{ id: string }>(API_ENDPOINTS.education, data)
+      const payload = {
+        ...data,
+        periodEnd: data.periodEnd || null,
+      }
+      const response = await api.post<{ id: string }>(API_ENDPOINTS.education, payload)
       return response.data
     },
     onSuccess: () => {
@@ -62,7 +74,11 @@ export function useUpdateEducationMutation() {
 
   return useMutation({
     mutationFn: async ({ id, ...data }: Education & { id: string }) => {
-      await api.put(API_ENDPOINTS.educationById(id), data)
+      const payload = {
+        ...data,
+        periodEnd: data.periodEnd || null,
+      }
+      await api.put(API_ENDPOINTS.educationById(id), payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CAREER_QUERY_KEYS.education })
