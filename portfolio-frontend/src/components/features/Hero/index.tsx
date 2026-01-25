@@ -1,12 +1,15 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { ArrowDown, Mail, FolderGit2 } from 'lucide-react'
+import { ArrowDown, Mail, FolderGit2, Download } from 'lucide-react'
 import { personalInfo } from '@/constants/personal-info'
 import { fadeInUp, staggerContainer, scaleIn } from '@/constants/animations'
 import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import AnimatedName from './_components/AnimatedName'
 
 const SCROLL_DELAY_MS = 500
+const CV_PATH = '/cv.pdf'
+const AVATAR_IMAGE_PATH = '/avatar.jpg'
 
 export default function Hero() {
   const { t, i18n } = useTranslation()
@@ -37,6 +40,15 @@ export default function Hero() {
         animate="visible"
         className="container mx-auto px-4 text-center"
       >
+        <motion.div variants={scaleIn} className="mb-6 flex justify-center">
+          <Avatar className="h-32 w-32 border-4 border-primary/20 shadow-xl shadow-primary/10">
+            <AvatarImage src={AVATAR_IMAGE_PATH} alt={personalInfo.name} />
+            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-3xl font-bold text-primary-foreground">
+              MR
+            </AvatarFallback>
+          </Avatar>
+        </motion.div>
+
         <motion.p
           variants={fadeInUp}
           className="mb-4 text-lg text-muted-foreground"
@@ -85,6 +97,17 @@ export default function Hero() {
           >
             <FolderGit2 className="h-4 w-4" />
             {t('hero.cta.projects')}
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="gap-2"
+            asChild
+          >
+            <a href={CV_PATH} download>
+              <Download className="h-4 w-4" />
+              {t('hero.cta.downloadCv')}
+            </a>
           </Button>
         </motion.div>
 
