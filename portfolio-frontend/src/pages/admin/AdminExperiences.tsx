@@ -197,7 +197,7 @@ export default function AdminExperiences() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingItem ? "Modifier l'expérience" : 'Nouvelle expérience'}</DialogTitle>
           </DialogHeader>

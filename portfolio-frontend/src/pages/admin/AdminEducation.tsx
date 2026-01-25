@@ -176,7 +176,7 @@ export default function AdminEducation() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{editingItem ? 'Modifier le parcours' : 'Nouveau parcours'}</DialogTitle>
           </DialogHeader>
