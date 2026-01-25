@@ -1,0 +1,14 @@
+# Fichiers de déploiement avec secrets
+deploy/migrations.sql
+
+# Fichiers IDE
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS
+.DS_Store
+Thumbs.db

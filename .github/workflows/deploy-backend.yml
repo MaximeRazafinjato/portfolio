@@ -1,0 +1,43 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'portfolio-backend/**'
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_NAME: func-portfolio-maxime
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: portfolio-backend/Portfolio.Functions
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore
+      run: dotnet restore portfolio-backend/Portfolio.sln
+
+    - name: Build
+      run: dotnet build portfolio-backend/Portfolio.sln --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }} --configuration Release --output ./output
+
+    - name: Deploy to Azure Functions
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ./output
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
