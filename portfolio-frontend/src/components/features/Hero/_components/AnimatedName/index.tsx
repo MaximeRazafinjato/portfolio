@@ -14,7 +14,7 @@ export default function AnimatedName({ text, delay = 0 }: AnimatedNameProps) {
 
   useEffect(() => {
     let currentIndex = 0
-    let timeoutId: NodeJS.Timeout
+    let timeoutId: ReturnType<typeof setTimeout>
 
     const startTyping = () => {
       timeoutId = setTimeout(() => {
