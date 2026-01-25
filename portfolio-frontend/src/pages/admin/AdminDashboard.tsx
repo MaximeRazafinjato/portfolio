@@ -93,7 +93,7 @@ export default function AdminDashboard() {
     '/admin/skills': skills.data?.length ?? 0,
     '/admin/soft-skills': softSkills.data?.length ?? 0,
     '/admin/projects': projects.data?.length ?? 0,
-    '/admin/blog': articles.data?.length ?? 0,
+    '/admin/blog': articles.data?.items?.length ?? 0,
   })
 
   const counts = getCounts()

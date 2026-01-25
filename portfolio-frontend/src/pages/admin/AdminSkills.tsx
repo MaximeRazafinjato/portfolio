@@ -39,10 +39,12 @@ export default function AdminSkills() {
   const deleteMutation = useDeleteSkillMutation()
 
   const categoryOptions: ComboboxOption[] = useMemo(() => {
-    return categories?.map((cat) => ({
-      value: cat.id,
-      label: cat.nameFr,
-    })) ?? []
+    return categories
+      ?.filter((cat): cat is typeof cat & { id: string } => !!cat.id)
+      .map((cat) => ({
+        value: cat.id,
+        label: cat.nameFr,
+      })) ?? []
   }, [categories])
 
   const iconOptions: ComboboxOption[] = useMemo(() => {
