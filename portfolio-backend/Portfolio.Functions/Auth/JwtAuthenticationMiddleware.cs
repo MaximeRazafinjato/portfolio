@@ -51,9 +51,7 @@ public class JwtAuthenticationMiddleware(IJwtValidationService jwtValidation, IC
         "DeleteProject",
 
         "UploadFile",
-        "DeleteFile",
-
-        "SeedData"
+        "DeleteFile"
     };
 
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)

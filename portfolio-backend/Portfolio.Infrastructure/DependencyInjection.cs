@@ -13,10 +13,16 @@ using Portfolio.Infrastructure.Repositories;
 
 namespace Portfolio.Infrastructure;
 
+public class DatabaseMigrationOptions
+{
+    public required string ConnectionString { get; init; }
+}
+
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
+        services.AddSingleton(new DatabaseMigrationOptions { ConnectionString = connectionString });
         services.AddDbContext<PortfolioDbContext>(options =>
             options.UseSqlServer(connectionString));
 
@@ -42,5 +48,12 @@ public static class DependencyInjection
         services.AddScoped<SeedDataService>();
 
         return services;
+    }
+
+    public static void ApplyMigrations(this IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<PortfolioDbContext>();
+        dbContext.Database.Migrate();
     }
 }

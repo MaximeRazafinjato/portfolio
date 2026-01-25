@@ -37,4 +37,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Build().Run();
+var host = builder.Build();
+host.Services.ApplyMigrations();
+host.Run();
