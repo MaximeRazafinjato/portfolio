@@ -12,3 +12,6 @@ deploy/migrations.sql
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude
+claude-files/
