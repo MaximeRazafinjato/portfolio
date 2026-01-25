@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, GripVertical } from 'lucide-react'
+import { getYearFromDate } from '@/utils/formatters'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { YearPicker } from '@/components/ui/year-picker'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -152,7 +154,7 @@ export default function AdminEducation() {
                         {item.flagEmoji} {item.descriptionFr}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {item.locationFr} • {item.periodStart} - {item.periodEnd || 'Présent'}
+                        {item.locationFr} • {getYearFromDate(item.periodStart)} - {item.periodEnd ? getYearFromDate(item.periodEnd) : 'Présent'}
                       </p>
                     </div>
                   </div>
@@ -183,15 +185,35 @@ export default function AdminEducation() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid gap-4 md:grid-cols-3">
               <div className="space-y-2">
-                <Label htmlFor="periodStart">Début</Label>
-                <Input id="periodStart" {...form.register('periodStart')} placeholder="2020" />
+                <Label>Début</Label>
+                <Controller
+                  name="periodStart"
+                  control={form.control}
+                  render={({ field }) => (
+                    <YearPicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Année"
+                    />
+                  )}
+                />
                 {form.formState.errors.periodStart && (
                   <p className="text-sm text-destructive">{form.formState.errors.periodStart.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="periodEnd">Fin</Label>
-                <Input id="periodEnd" {...form.register('periodEnd')} placeholder="2024" />
+                <Label>Fin</Label>
+                <Controller
+                  name="periodEnd"
+                  control={form.control}
+                  render={({ field }) => (
+                    <YearPicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Année"
+                    />
+                  )}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="flagEmoji">Emoji drapeau</Label>

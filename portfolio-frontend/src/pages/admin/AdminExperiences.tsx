@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, GripVertical, X } from 'lucide-react'
+import { MonthYearPicker } from '@/components/ui/month-year-picker'
 
 const formatPeriodDate = (dateString: string): string => {
   const date = new Date(dateString)
@@ -11,6 +12,7 @@ const formatPeriodDate = (dateString: string): string => {
     year: 'numeric',
   })
 }
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -223,16 +225,30 @@ export default function AdminExperiences() {
 
             <div className="grid gap-4 md:grid-cols-3">
               <div className="space-y-2">
-                <Label htmlFor="periodStart">Début</Label>
-                <Input id="periodStart" {...form.register('periodStart')} placeholder="Jan 2023" />
+                <Label>Début</Label>
+                <Controller
+                  name="periodStart"
+                  control={form.control}
+                  render={({ field }) => (
+                    <MonthYearPicker
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="periodEnd">Fin</Label>
-                <Input
-                  id="periodEnd"
-                  {...form.register('periodEnd')}
-                  placeholder="Déc 2024"
-                  disabled={form.watch('isCurrent')}
+                <Label>Fin</Label>
+                <Controller
+                  name="periodEnd"
+                  control={form.control}
+                  render={({ field }) => (
+                    <MonthYearPicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={form.watch('isCurrent')}
+                    />
+                  )}
                 />
               </div>
               <div className="flex items-end gap-2">
