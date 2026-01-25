@@ -1,5 +1,6 @@
 # Script de création des ressources Azure pour le Portfolio
-# IMPORTANT: Remplacer <PASSWORD_SECURISE> par un mot de passe fort
+# IMPORTANT: Définir la variable d'environnement avant d'exécuter :
+#   $env:SQL_ADMIN_PASSWORD = "VotreMotDePasseSecurise"
 
 $RESOURCE_GROUP = "rg-portfolio-maxime"
 $LOCATION = "swedencentral"
@@ -34,7 +35,7 @@ az sql server create `
   --resource-group $RESOURCE_GROUP `
   --location $LOCATION `
   --admin-user portfolioadmin `
-  --admin-password "<REMOVED_SECRET>"
+  --admin-password "$env:SQL_ADMIN_PASSWORD"
 
 Write-Host "=== Création de la base de données SQL ===" -ForegroundColor Cyan
 az sql db create `
@@ -102,7 +103,7 @@ az functionapp config appsettings set `
     "Cors__AllowedOrigins__0=$STATIC_WEBSITE_URL"
 
 Write-Host "=== Configuration de la connection string SQL ===" -ForegroundColor Cyan
-$SQL_PASSWORD = "<REMOVED_SECRET>"
+$SQL_PASSWORD = "$env:SQL_ADMIN_PASSWORD"
 az functionapp config appsettings set `
   --name $FUNCTION_APP `
   --resource-group $RESOURCE_GROUP `
