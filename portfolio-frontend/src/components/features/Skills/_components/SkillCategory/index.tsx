@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import type { SkillCategory as SkillCategoryType } from '@/constants/skills'
+import { skillIcons } from '@/constants/skill-icons'
 import { fadeInUp, staggerContainer } from '@/constants/animations'
 import { Badge } from '@/components/ui/badge'
 
@@ -20,11 +21,17 @@ export default function SkillCategory({ category }: SkillCategoryProps) {
         variants={staggerContainer}
         className="flex flex-wrap gap-2"
       >
-        {category.skills.map((skill) => (
-          <motion.div key={skill} variants={fadeInUp}>
-            <Badge variant="secondary">{skill}</Badge>
-          </motion.div>
-        ))}
+        {category.skills.map((skill) => {
+          const Icon = skillIcons[skill]
+          return (
+            <motion.div key={skill} variants={fadeInUp}>
+              <Badge variant="secondary" className="gap-1.5">
+                {Icon && <Icon className="h-3.5 w-3.5" />}
+                {skill}
+              </Badge>
+            </motion.div>
+          )
+        })}
       </motion.div>
     </motion.div>
   )
