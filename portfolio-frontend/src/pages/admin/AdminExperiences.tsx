@@ -3,6 +3,14 @@ import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, GripVertical, X } from 'lucide-react'
+
+const formatPeriodDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('fr-FR', {
+    month: 'short',
+    year: 'numeric',
+  })
+}
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -165,7 +173,7 @@ export default function AdminExperiences() {
                     <div>
                       <p className="font-medium">{item.companyName}</p>
                       <p className="text-sm text-muted-foreground">
-                        {item.positionFr} • {item.periodStart} - {item.isCurrent ? 'Présent' : item.periodEnd}
+                        {item.positionFr} • {formatPeriodDate(item.periodStart)} - {item.isCurrent ? 'Présent' : formatPeriodDate(item.periodEnd || '')}
                       </p>
                     </div>
                   </div>
