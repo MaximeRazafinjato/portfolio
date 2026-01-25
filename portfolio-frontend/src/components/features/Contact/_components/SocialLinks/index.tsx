@@ -1,45 +1,76 @@
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
-import { personalInfo } from '@/constants/personal-info'
+import { Github, Linkedin, Mail, Phone, MapPin, Globe } from 'lucide-react'
+import { personalInfo as staticPersonalInfo } from '@/constants/personal-info'
 import { fadeInUp, staggerContainer } from '@/constants/animations'
+import { usePersonalInfoQuery, useSocialLinksQuery } from '@/domains/profile'
 
-const contactInfo = [
-  {
-    id: 'email',
-    icon: Mail,
-    label: personalInfo.email,
-    href: `mailto:${personalInfo.email}`,
-  },
-  {
-    id: 'phone',
-    icon: Phone,
-    label: personalInfo.phone,
-    href: `tel:${personalInfo.phone.replace(/\s/g, '')}`,
-  },
-  {
-    id: 'location',
-    icon: MapPin,
-    label: `${personalInfo.location.city}, France`,
-    href: null,
-  },
-]
-
-const socialLinks = [
-  {
-    id: 'github',
-    icon: Github,
-    label: 'GitHub',
-    href: personalInfo.social.github,
-  },
-  {
-    id: 'linkedin',
-    icon: Linkedin,
-    label: 'LinkedIn',
-    href: personalInfo.social.linkedin,
-  },
-]
+const PLATFORM_ICONS: Record<string, typeof Github> = {
+  github: Github,
+  linkedin: Linkedin,
+}
 
 export default function SocialLinks() {
+  const { i18n } = useTranslation()
+  const locale = i18n.language as 'fr' | 'en'
+
+  const { data: apiPersonalInfo } = usePersonalInfoQuery()
+  const { data: apiSocialLinks } = useSocialLinksQuery()
+
+  const email = apiPersonalInfo?.email ?? staticPersonalInfo.email
+  const phone = apiPersonalInfo?.phone ?? staticPersonalInfo.phone
+  const city = apiPersonalInfo?.city ?? staticPersonalInfo.location.city
+  const country = locale === 'fr'
+    ? (apiPersonalInfo?.countryFr ?? staticPersonalInfo.location.country.fr)
+    : (apiPersonalInfo?.countryEn ?? staticPersonalInfo.location.country.en)
+
+  const contactInfo = useMemo(() => [
+    {
+      id: 'email',
+      icon: Mail,
+      label: email,
+      href: `mailto:${email}`,
+    },
+    {
+      id: 'phone',
+      icon: Phone,
+      label: phone,
+      href: `tel:${phone.replace(/\s/g, '')}`,
+    },
+    {
+      id: 'location',
+      icon: MapPin,
+      label: `${city}, ${country}`,
+      href: null,
+    },
+  ], [email, phone, city, country])
+
+  const socialLinkItems = useMemo(() => {
+    if (apiSocialLinks?.length) {
+      return apiSocialLinks.map((link) => ({
+        id: link.id || link.platform,
+        icon: PLATFORM_ICONS[link.platform.toLowerCase()] || Globe,
+        label: link.platform,
+        href: link.url,
+      }))
+    }
+    return [
+      {
+        id: 'github',
+        icon: Github,
+        label: 'GitHub',
+        href: staticPersonalInfo.social.github,
+      },
+      {
+        id: 'linkedin',
+        icon: Linkedin,
+        label: 'LinkedIn',
+        href: staticPersonalInfo.social.linkedin,
+      },
+    ]
+  }, [apiSocialLinks])
+
   return (
     <motion.div
       variants={staggerContainer}
@@ -66,7 +97,7 @@ export default function SocialLinks() {
       </motion.div>
 
       <motion.div variants={fadeInUp} className="flex gap-4">
-        {socialLinks.map(({ id, icon: Icon, label, href }) => (
+        {socialLinkItems.map(({ id, icon: Icon, label, href }) => (
           <motion.a
             key={id}
             href={href}

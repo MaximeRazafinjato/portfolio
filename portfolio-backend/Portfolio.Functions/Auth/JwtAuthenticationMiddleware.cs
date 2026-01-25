@@ -14,7 +14,44 @@ public class JwtAuthenticationMiddleware(IJwtValidationService jwtValidation, IC
     {
         "CreateArticle",
         "UpdateArticle",
-        "DeleteArticle"
+        "DeleteArticle",
+
+        "UpsertPersonalInfo",
+
+        "CreateSocialLink",
+        "UpdateSocialLink",
+        "DeleteSocialLink",
+
+        "CreateLanguage",
+        "UpdateLanguage",
+        "DeleteLanguage",
+
+        "CreateExperience",
+        "UpdateExperience",
+        "DeleteExperience",
+
+        "CreateEducation",
+        "UpdateEducation",
+        "DeleteEducation",
+
+        "CreateSkillCategory",
+        "UpdateSkillCategory",
+        "DeleteSkillCategory",
+
+        "CreateSkill",
+        "UpdateSkill",
+        "DeleteSkill",
+
+        "CreateSoftSkill",
+        "UpdateSoftSkill",
+        "DeleteSoftSkill",
+
+        "CreateProject",
+        "UpdateProject",
+        "DeleteProject",
+
+        "UploadFile",
+        "DeleteFile"
     };
 
     public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
@@ -70,7 +107,9 @@ public class JwtAuthenticationMiddleware(IJwtValidationService jwtValidation, IC
 
         var email = principal.FindFirst(EmailClaimNamespace)?.Value
             ?? principal.FindFirst(ClaimTypes.Email)?.Value
-            ?? principal.FindFirst("email")?.Value;
+            ?? principal.FindFirst("email")?.Value
+            ?? principal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value
+            ?? principal.FindFirst(c => c.Type.EndsWith("/email", StringComparison.OrdinalIgnoreCase))?.Value;
 
         return !string.IsNullOrEmpty(email) &&
                email.Equals(adminEmail, StringComparison.OrdinalIgnoreCase);

@@ -35,6 +35,7 @@
       "title": "Languages",
       "native": "Native",
       "fluent": "Fluent",
+      "advanced": "Advanced",
       "intermediate": "Intermediate",
       "basic": "Basic"
     }

@@ -1,0 +1,23 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions.Worker;
+using Portfolio.Application.Career.Educations;
+
+namespace Portfolio.Functions.Career;
+
+public class DeleteEducationFunction(DeleteEducationService service)
+{
+    [Function("DeleteEducation")]
+    public async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "education/{id:guid}")] HttpRequest req,
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var result = await service.ExecuteAsync(id, cancellationToken);
+
+        if (!result.IsSuccess)
+            return new BadRequestObjectResult(new { errors = result.Errors });
+
+        return new NoContentResult();
+    }
+}

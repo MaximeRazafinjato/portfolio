@@ -35,6 +35,7 @@
       "title": "Langues",
       "native": "Langue maternelle",
       "fluent": "Courant",
+      "advanced": "Avancé",
       "intermediate": "Intermédiaire",
       "basic": "Notions"
     }
