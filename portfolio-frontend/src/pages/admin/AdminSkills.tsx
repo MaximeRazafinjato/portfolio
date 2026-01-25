@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState, useMemo } from 'react'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, GripVertical } from 'lucide-react'
@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
+import { Combobox, type ComboboxOption } from '@/components/ui/combobox'
 import {
   useSkillsQuery,
   useSkillCategoriesQuery,
@@ -25,13 +26,7 @@ import {
   type Skill,
   type SkillFormData,
 } from '@/domains/portfolio'
-
-const ICON_OPTIONS = [
-  'react', 'typescript', 'javascript', 'html5', 'css3', 'tailwind',
-  'nodejs', 'dotnet', 'csharp', 'python', 'java', 'go',
-  'postgresql', 'mongodb', 'redis', 'docker', 'kubernetes', 'azure',
-  'git', 'github', 'gitlab', 'vscode', 'figma', 'linux',
-]
+import { skillIcons } from '@/constants/skill-icons'
 
 export default function AdminSkills() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -42,6 +37,25 @@ export default function AdminSkills() {
   const createMutation = useCreateSkillMutation()
   const updateMutation = useUpdateSkillMutation()
   const deleteMutation = useDeleteSkillMutation()
+
+  const categoryOptions: ComboboxOption[] = useMemo(() => {
+    return categories?.map((cat) => ({
+      value: cat.id,
+      label: cat.nameFr,
+    })) ?? []
+  }, [categories])
+
+  const iconOptions: ComboboxOption[] = useMemo(() => {
+    const options: ComboboxOption[] = [{ value: '', label: 'Aucune' }]
+    Object.entries(skillIcons).forEach(([key, Icon]) => {
+      options.push({
+        value: key,
+        label: key,
+        icon: <Icon className="size-4" />,
+      })
+    })
+    return options
+  }, [])
 
   const form = useForm<SkillFormData>({
     resolver: zodResolver(skillSchema),
@@ -194,36 +208,41 @@ export default function AdminSkills() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="categoryId">Catégorie</Label>
-              <select
-                id="categoryId"
-                {...form.register('categoryId')}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              >
-                {categories?.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.nameFr}
-                  </option>
-                ))}
-              </select>
+              <Label>Catégorie</Label>
+              <Controller
+                name="categoryId"
+                control={form.control}
+                render={({ field }) => (
+                  <Combobox
+                    options={categoryOptions}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    placeholder="Sélectionner une catégorie..."
+                    searchPlaceholder="Rechercher une catégorie..."
+                    emptyMessage="Aucune catégorie trouvée."
+                  />
+                )}
+              />
               {form.formState.errors.categoryId && (
                 <p className="text-sm text-destructive">{form.formState.errors.categoryId.message}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="iconKey">Icône</Label>
-              <select
-                id="iconKey"
-                {...form.register('iconKey')}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              >
-                <option value="">Aucune</option>
-                {ICON_OPTIONS.map((icon) => (
-                  <option key={icon} value={icon}>
-                    {icon}
-                  </option>
-                ))}
-              </select>
+              <Label>Icône</Label>
+              <Controller
+                name="iconKey"
+                control={form.control}
+                render={({ field }) => (
+                  <Combobox
+                    options={iconOptions}
+                    value={field.value || ''}
+                    onValueChange={field.onChange}
+                    placeholder="Sélectionner une icône..."
+                    searchPlaceholder="Rechercher une icône..."
+                    emptyMessage="Aucune icône trouvée."
+                  />
+                )}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="displayOrder">Ordre d'affichage</Label>

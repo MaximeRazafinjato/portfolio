@@ -1,11 +1,6 @@
+import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Combobox } from '@/components/ui/combobox'
 
 interface MonthYearPickerProps {
   value?: string
@@ -64,45 +59,51 @@ export function MonthYearPicker({
   minYear = 1990,
   maxYear = currentYear + 5,
 }: MonthYearPickerProps) {
-  const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => maxYear - i)
+  const yearOptions = useMemo(() => {
+    return Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
+      const year = (maxYear - i).toString()
+      return { value: year, label: year }
+    })
+  }, [minYear, maxYear])
+
   const { month, year } = parseMonthYear(value || '')
 
   const handleMonthChange = (newMonth: string) => {
-    const finalYear = year || currentYear.toString()
-    onChange(toISODate(finalYear, newMonth))
+    if (newMonth) {
+      const finalYear = year || currentYear.toString()
+      onChange(toISODate(finalYear, newMonth))
+    }
   }
 
   const handleYearChange = (newYear: string) => {
-    const finalMonth = month || '01'
-    onChange(toISODate(newYear, finalMonth))
+    if (newYear) {
+      const finalMonth = month || '01'
+      onChange(toISODate(newYear, finalMonth))
+    }
   }
 
   return (
     <div className={cn('flex gap-2', className)}>
-      <Select value={month} onValueChange={handleMonthChange} disabled={disabled}>
-        <SelectTrigger className="flex-1">
-          <SelectValue placeholder="Mois" />
-        </SelectTrigger>
-        <SelectContent>
-          {MONTHS.map((m) => (
-            <SelectItem key={m.value} value={m.value}>
-              {m.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select value={year} onValueChange={handleYearChange} disabled={disabled}>
-        <SelectTrigger className="w-24">
-          <SelectValue placeholder="Année" />
-        </SelectTrigger>
-        <SelectContent>
-          {years.map((y) => (
-            <SelectItem key={y} value={y.toString()}>
-              {y}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <Combobox
+        options={MONTHS}
+        value={month}
+        onValueChange={handleMonthChange}
+        placeholder="Mois"
+        searchPlaceholder="Rechercher..."
+        emptyMessage="Aucun mois trouvé."
+        className="flex-1"
+        disabled={disabled}
+      />
+      <Combobox
+        options={yearOptions}
+        value={year}
+        onValueChange={handleYearChange}
+        placeholder="Année"
+        searchPlaceholder="Rechercher..."
+        emptyMessage="Aucune année trouvée."
+        className="w-28"
+        disabled={disabled}
+      />
     </div>
   )
 }

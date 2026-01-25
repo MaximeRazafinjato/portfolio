@@ -1,10 +1,5 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { useMemo } from 'react'
+import { Combobox } from '@/components/ui/combobox'
 
 interface YearPickerProps {
   value?: string
@@ -39,25 +34,31 @@ export function YearPicker({
   minYear = 1990,
   maxYear = currentYear + 5,
 }: YearPickerProps) {
-  const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => maxYear - i)
+  const yearOptions = useMemo(() => {
+    return Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
+      const year = (maxYear - i).toString()
+      return { value: year, label: year }
+    })
+  }, [minYear, maxYear])
+
   const displayValue = getYearFromValue(value || '')
 
   const handleChange = (year: string) => {
-    onChange(yearToISODate(year))
+    if (year) {
+      onChange(yearToISODate(year))
+    }
   }
 
   return (
-    <Select value={displayValue} onValueChange={handleChange} disabled={disabled}>
-      <SelectTrigger className={className}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {years.map((year) => (
-          <SelectItem key={year} value={year.toString()}>
-            {year}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Combobox
+      options={yearOptions}
+      value={displayValue}
+      onValueChange={handleChange}
+      placeholder={placeholder}
+      searchPlaceholder="Rechercher..."
+      emptyMessage="Aucune année trouvée."
+      className={className}
+      disabled={disabled}
+    />
   )
 }

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState, useMemo } from 'react'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, GripVertical } from 'lucide-react'
@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
+import { Combobox, type ComboboxOption } from '@/components/ui/combobox'
 import {
   useLanguagesQuery,
   useCreateLanguageMutation,
@@ -34,6 +35,13 @@ export default function AdminLanguages() {
   const createMutation = useCreateLanguageMutation()
   const updateMutation = useUpdateLanguageMutation()
   const deleteMutation = useDeleteLanguageMutation()
+
+  const levelOptions: ComboboxOption[] = useMemo(() => {
+    return LANGUAGE_LEVELS.map((level) => ({
+      value: level,
+      label: level,
+    }))
+  }, [])
 
   const form = useForm<LanguageFormData>({
     resolver: zodResolver(languageSchema),
@@ -179,18 +187,21 @@ export default function AdminLanguages() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="level">Niveau</Label>
-              <select
-                id="level"
-                {...form.register('level')}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              >
-                {LANGUAGE_LEVELS.map((level) => (
-                  <option key={level} value={level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
+              <Label>Niveau</Label>
+              <Controller
+                name="level"
+                control={form.control}
+                render={({ field }) => (
+                  <Combobox
+                    options={levelOptions}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    placeholder="Sélectionner un niveau..."
+                    searchPlaceholder="Rechercher..."
+                    emptyMessage="Aucun niveau trouvé."
+                  />
+                )}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="displayOrder">Ordre d'affichage</Label>
