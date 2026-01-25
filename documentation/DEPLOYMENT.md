@@ -1,6 +1,9 @@
 # Guide de Déploiement - Portfolio Maxime Razafinjato
 
-Ce document décrit l'architecture et le processus de déploiement complet du portfolio sur Azure avec CI/CD GitHub Actions.
+Ce document décrit l'architecture et le processus de déploiement complet du portfolio.
+
+**Frontend** : Vercel (avec CI/CD automatique)
+**Backend** : Azure Functions (avec CI/CD GitHub Actions)
 
 ---
 
@@ -26,24 +29,16 @@ Ce document décrit l'architecture et le processus de déploiement complet du po
 │                              UTILISATEUR                                     │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         CLOUDFLARE (CDN/Proxy)                               │
-│  • SSL/TLS gratuit                                                           │
-│  • Cache                                                                     │
-│  • Protection DDoS                                                           │
-│  • Domaine: maxime-razafinjato.fr                                           │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                    │
                     ┌───────────────┴───────────────┐
                     ▼                               ▼
 ┌───────────────────────────────┐   ┌───────────────────────────────┐
-│      FRONTEND (React)         │   │      BACKEND (.NET 9)         │
-│  Azure Blob Storage           │   │   Azure Functions             │
-│  Static Website Hosting       │   │   Consumption Plan            │
-│                               │   │                               │
-│  URL: stportfoliomaxime.      │   │  URL: func-portfolio-maxime.  │
-│       z1.web.core.windows.net │   │       azurewebsites.net/api   │
+│      FRONTEND (React/Vite)    │   │      BACKEND (.NET 9)         │
+│           VERCEL              │   │   Azure Functions             │
+│                               │   │   Consumption Plan            │
+│  • SSL/TLS automatique        │   │                               │
+│  • CDN global                 │   │  URL: func-portfolio-maxime.  │
+│  • CI/CD intégré GitHub       │   │       azurewebsites.net/api   │
+│  • maxime-razafinjato.fr      │   │                               │
 └───────────────────────────────┘   └───────────────────────────────┘
                                                     │
                                                     ▼
@@ -60,11 +55,26 @@ Ce document décrit l'architecture et le processus de déploiement complet du po
 ### Flux de données
 
 1. **Visiteur** accède à `https://maxime-razafinjato.fr`
-2. **Cloudflare** reçoit la requête, applique le SSL et le cache
-3. **Frontend** (React SPA) est servi depuis Azure Blob Storage
-4. **Frontend** appelle l'API backend pour les données dynamiques
-5. **Backend** (Azure Functions) traite les requêtes et interroge la BDD
-6. **Azure SQL** stocke les articles et messages de contact
+2. **Vercel** sert le frontend avec SSL automatique et CDN global
+3. **Frontend** (React SPA) appelle l'API backend pour les données dynamiques
+4. **Backend** (Azure Functions) traite les requêtes et interroge la BDD
+5. **Azure SQL** stocke les articles et messages de contact
+
+### Historique : Migration Azure → Vercel (Janvier 2026)
+
+Le frontend était initialement hébergé sur **Azure Blob Storage Static Website**. La migration vers Vercel a été effectuée pour les raisons suivantes :
+
+**Problème principal** : Azure Blob Storage Static Website ne permet pas de configurer un domaine personnalisé avec HTTPS sans passer par Azure CDN (coût supplémentaire significatif).
+
+**Tentatives échouées** :
+- Configuration CNAME Cloudflare → Azure : HTTPS impossible sans certificat custom
+- Azure CDN : Trop coûteux pour un projet portfolio
+
+**Pourquoi Vercel** :
+- SSL/TLS automatique avec domaine personnalisé (gratuit)
+- CI/CD intégré avec GitHub (déploiement automatique à chaque push)
+- CDN global performant
+- Configuration simple (détection automatique Vite)
 
 ---
 
@@ -85,20 +95,11 @@ Toutes les ressources sont dans le **Resource Group** `rg-portfolio-maxime` en r
 | App Service Plan | `SwedenCentralLinuxDynamicPlan` | Consumption | Inclus |
 | Application Insights | `func-portfolio-maxime` | Monitoring | Gratuit (5GB/mois) |
 
-### 2.2 Storage Account Frontend (`stportfoliomaxime`)
+### 2.2 Storage Account Frontend (`stportfoliomaxime`) - OBSOLÈTE
 
-**Rôle** : Héberger le frontend React comme site statique.
+> ⚠️ **OBSOLÈTE** : Cette ressource peut être supprimée. Le frontend est maintenant hébergé sur Vercel.
 
-**Configuration** :
-- **Static Website** : Activé
-- **Index document** : `index.html`
-- **Error document** : `index.html` (pour le routing SPA)
-- **URL publique** : `https://stportfoliomaxime.z1.web.core.windows.net`
-
-**Comment ça marche** :
-- Azure Blob Storage peut servir des fichiers statiques directement via HTTP
-- Le conteneur `$web` est spécial : son contenu est servi comme un site web
-- Parfait pour les SPA (Single Page Applications) car peu coûteux et scalable
+**Ancien rôle** : Hébergeait le frontend React comme site statique avant la migration vers Vercel.
 
 ### 2.3 Azure Functions (`func-portfolio-maxime`)
 
@@ -173,43 +174,51 @@ Azure DevOps n'était pas accessible (restrictions compte étudiant), donc on ut
 **Secrets utilisés** :
 - `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` : Credentials de déploiement
 
-### 3.3 Workflow Frontend (`.github/workflows/deploy-frontend.yml`)
+### 3.3 Frontend sur Vercel (CI/CD automatique)
 
-**Déclencheurs** :
-- Push sur `master` avec changements dans `portfolio-frontend/**`
-- Déclenchement manuel
+> Le workflow GitHub Actions pour le frontend (`.github/workflows/deploy-frontend.yml`) a été supprimé. Vercel gère automatiquement le déploiement.
 
-**Étapes** :
-```yaml
-1. Checkout           → Récupère le code source
-2. Setup Node.js 20   → Installe Node.js
-3. Setup pnpm         → Installe pnpm
-4. Install deps       → pnpm install
-5. Build              → pnpm build (avec variables d'environnement)
-6. Upload to Blob     → Envoie les fichiers dans le conteneur $web
+**Fonctionnement** :
+- Vercel est connecté au repo GitHub
+- À chaque push sur `master`, Vercel build et déploie automatiquement
+- Preview deployments sur chaque branche/PR
+
+**Configuration Vercel** :
+- **Root Directory** : `portfolio-frontend`
+- **Framework** : Vite (auto-détecté)
+- **Build Command** : `pnpm build`
+- **Output Directory** : `dist`
+- **Install Command** : `pnpm install`
+
+**Variables d'environnement** (configurées dans Vercel Dashboard) :
+
+| Variable | Valeur |
+|----------|--------|
+| `VITE_API_URL` | `https://func-portfolio-maxime.azurewebsites.net/api` |
+| `VITE_AUTH0_DOMAIN` | `maxime-razafinjato.eu.auth0.com` |
+| `VITE_AUTH0_CLIENT_ID` | (secret) |
+| `VITE_AUTH0_AUDIENCE` | `https://cv-web-api` |
+
+**Fichier de configuration** : `portfolio-frontend/vercel.json`
+```json
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
 ```
+Ce fichier assure que le routing SPA fonctionne (toutes les routes redirigent vers `index.html`).
 
-**Variables d'environnement injectées au build** :
-```
-VITE_API_URL = https://func-portfolio-maxime.azurewebsites.net/api
-VITE_AUTH0_DOMAIN = maxime-razafinjato.eu.auth0.com
-VITE_AUTH0_CLIENT_ID = (depuis secret)
-VITE_AUTH0_AUDIENCE = https://cv-web-api
-```
+### 3.4 Déclenchement des déploiements
 
-**Secrets utilisés** :
-- `AUTH0_CLIENT_ID` : ID de l'application Auth0
-- `AZURE_STORAGE_CONNECTION_STRING` : Connection string du storage account
+**Backend (GitHub Actions)** :
+- Automatique sur push `master` avec changements dans `portfolio-backend/**`
+- Manuel : GitHub → Actions → "Run workflow"
 
-### 3.4 Déclenchement des workflows
-
-Les workflows se déclenchent automatiquement quand :
-- Tu push sur `master`
-- Les fichiers modifiés sont dans le dossier concerné (`paths`)
-
-Pour déclencher manuellement :
-1. GitHub → Actions → Sélectionner le workflow
-2. "Run workflow" → "Run workflow"
+**Frontend (Vercel)** :
+- Automatique sur chaque push (toutes les branches)
+- Production : push sur `master`
+- Preview : push sur autres branches
 
 ---
 
@@ -298,7 +307,7 @@ Le backend vérifie que :
 
 ## 6. Domaine Personnalisé
 
-### 6.1 Architecture DNS
+### 6.1 Architecture DNS (avec Vercel)
 
 ```
 maxime-razafinjato.fr
@@ -306,38 +315,36 @@ maxime-razafinjato.fr
         ▼ (Nameservers)
    CLOUDFLARE
         │
-        ▼ (CNAME)
-stportfoliomaxime.z1.web.core.windows.net
+        ▼ (A record)
+   VERCEL (76.76.21.21 ou IP fournie par Vercel)
         │
         ▼
-   AZURE BLOB STORAGE
+   FRONTEND REACT
 ```
 
-### 6.2 Pourquoi Cloudflare ?
+### 6.2 Pourquoi Vercel gère le domaine ?
 
-- **Gratuit** : Plan Free suffisant
-- **SSL/TLS** : Certificat HTTPS automatique
-- **CDN** : Cache global pour performances
-- **Protection** : DDoS, WAF basique
-- **CNAME Flattening** : Permet CNAME sur domaine apex (@)
+Vercel gère directement le SSL/TLS pour le domaine personnalisé, ce qui simplifie l'architecture :
+- **SSL automatique** : Certificat Let's Encrypt géré par Vercel
+- **CDN global** : Edge network performant
+- **Pas de proxy Cloudflare** : DNS only pour permettre à Vercel d'émettre le certificat
 
-### 6.3 Configuration Cloudflare
+### 6.3 Configuration Cloudflare (DNS only)
 
 **Nameservers** (configurés chez OVH) :
-- `adam.ns.cloudflare.com` (exemple)
-- `bella.ns.cloudflare.com` (exemple)
+- Délégués à Cloudflare
 
 **Enregistrements DNS** :
 
 | Type | Name | Content | Proxy |
 |------|------|---------|-------|
-| CNAME | `@` | `stportfoliomaxime.z1.web.core.windows.net` | Proxied ☁️ |
-| CNAME | `www` | `stportfoliomaxime.z1.web.core.windows.net` | Proxied ☁️ |
+| A | `@` | `76.76.21.21` (ou IP Vercel) | DNS only ⚪ |
+| CNAME | `www` | `cname.vercel-dns.com` | DNS only ⚪ |
 | MX | `@` | `mx1.mail.ovh.net` | DNS only |
 | MX | `@` | `mx2.mail.ovh.net` | DNS only |
 | MX | `@` | `mx3.mail.ovh.net` | DNS only |
 
-**SSL/TLS Mode** : Full (recommandé)
+> ⚠️ **Important** : Le proxy Cloudflare doit être **désactivé** (nuage gris) pour que Vercel puisse émettre et renouveler le certificat SSL.
 
 ### 6.4 Registrar OVH
 
@@ -354,7 +361,7 @@ stportfoliomaxime.z1.web.core.windows.net
 |---------|-----|
 | Frontend (domaine) | https://maxime-razafinjato.fr |
 | Frontend (www) | https://www.maxime-razafinjato.fr |
-| Frontend (Azure) | https://stportfoliomaxime.z1.web.core.windows.net |
+| Frontend (Vercel) | https://portfolio-*.vercel.app |
 | Backend API | https://func-portfolio-maxime.azurewebsites.net/api |
 | SQL Server | sql-portfolio-maxime.database.windows.net |
 
@@ -464,9 +471,9 @@ dotnet ef migrations script --project Portfolio.Infrastructure --startup-project
 
 ### 10.1 Le frontend ne charge pas
 
-1. Vérifier que le Static Website est activé sur le storage account
-2. Vérifier que `index.html` existe dans le conteneur `$web`
-3. Vérifier les DNS (Cloudflare) pointent vers la bonne URL
+1. Vérifier le statut du déploiement sur Vercel Dashboard
+2. Vérifier que le DNS Cloudflare pointe vers Vercel (A record → IP Vercel)
+3. Vérifier que le proxy Cloudflare est désactivé (DNS only)
 
 ### 10.2 Erreur CORS
 
@@ -509,6 +516,21 @@ C'est normal avec le plan Consumption. La première requête après inactivité 
 - Passer au plan Premium (payant, toujours warm)
 - Configurer un ping régulier (pas recommandé)
 
+### 10.7 Erreur SQL "Login failed for user"
+
+```
+Login failed for user 'portfolioadmin'
+```
+
+**Causes possibles** :
+1. Mot de passe incorrect dans la connection string
+2. Caractères spéciaux mal encodés (ex: `\` devant `!` ou `#`)
+
+**Solution** :
+1. Vérifier la connection string dans Azure Portal → Function App → Environment variables
+2. S'assurer qu'il n'y a pas de caractères d'échappement (`\`) dans le mot de passe
+3. Redémarrer la Function App après modification
+
 ---
 
 ## Annexes
@@ -519,18 +541,17 @@ C'est normal avec le plan Consumption. La première requête après inactivité 
 cv/
 ├── .github/
 │   └── workflows/
-│       ├── deploy-backend.yml    # CI/CD backend
-│       └── deploy-frontend.yml   # CI/CD frontend
+│       └── deploy-backend.yml    # CI/CD backend (GitHub Actions)
 ├── deploy/
 │   ├── azure-resources.ps1       # Script création ressources Azure
-│   ├── azure-cdn.ps1             # Script CDN (non utilisé)
 │   └── apply-migrations.ps1      # Script migrations EF Core
 ├── portfolio-backend/
 │   └── ...
 ├── portfolio-frontend/
+│   ├── vercel.json               # Configuration Vercel (rewrites SPA)
 │   ├── .env.production.example   # Variables d'env de production
 │   └── ...
-└── docs/
+└── documentation/
     └── DEPLOYMENT.md             # Ce fichier
 ```
 
@@ -540,10 +561,11 @@ cv/
 |---------|------|
 | Azure SQL Basic | ~5€ |
 | Azure Functions (Consumption) | ~0€ (faible trafic) |
-| Azure Storage | ~0.05€ |
-| Cloudflare | Gratuit |
+| Azure Storage (backend only) | ~0.02€ |
+| Vercel (Hobby plan) | Gratuit |
+| Cloudflare (DNS only) | Gratuit |
 | Domaine .fr (OVH) | ~7€/an |
-| **Total** | **~5-6€/mois** |
+| **Total** | **~5€/mois** |
 
 ### C. Pour aller plus loin
 
@@ -555,4 +577,4 @@ cv/
 
 ---
 
-*Dernière mise à jour : 25 janvier 2026*
+*Dernière mise à jour : 25 janvier 2026 - Migration frontend vers Vercel*
