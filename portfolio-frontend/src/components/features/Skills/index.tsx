@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 import {
   technicalSkills as staticTechnicalSkills,
   softSkills as staticSoftSkills,
-  type SkillCategory as SkillCategoryType,
 } from '@/constants/skills'
 import { fadeInUp, staggerContainer } from '@/constants/animations'
 import { useSkillCategoriesWithSkillsQuery, useSoftSkillsQuery } from '@/domains/portfolio'
+import type { SkillCategoryDisplay } from './_components/SkillCategory'
 import SkillCategory from './_components/SkillCategory'
 import SoftSkillBadge from './_components/SoftSkillBadge'
 
@@ -17,13 +17,16 @@ export default function Skills() {
   const { data: apiCategories } = useSkillCategoriesWithSkillsQuery()
   const { data: apiSoftSkills } = useSoftSkillsQuery()
 
-  const categoryItems: SkillCategoryType[] = apiCategories?.length
+  const categoryItems: SkillCategoryDisplay[] = apiCategories?.length
     ? apiCategories.map((cat) => ({
         id: cat.id || '',
         nameKey: locale === 'fr' ? cat.nameFr : cat.nameEn,
-        skills: cat.skills?.map((s) => s.name) || [],
+        skills: cat.skills?.map((s) => ({ name: s.name, iconKey: s.iconKey })) || [],
       }))
-    : staticTechnicalSkills
+    : staticTechnicalSkills.map((cat) => ({
+        ...cat,
+        skills: cat.skills.map((name) => ({ name, iconKey: name })),
+      }))
 
   const softSkillItems = apiSoftSkills?.length
     ? apiSoftSkills.map((skill) => ({
