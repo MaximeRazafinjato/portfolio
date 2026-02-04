@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxime Razafinjato - Design Showcase</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --transition-speed: 0.6s;
+        }
+
+        /* ========================================
+           THEME SWITCHER - Fixed Position
+        ======================================== */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .theme-switcher h3 {
+            color: #fff;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            opacity: 0.7;
+        }
+
+        .theme-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .theme-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-btn .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .theme-btn[data-theme="luxury"] {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #d4af37;
+        }
+        .theme-btn[data-theme="luxury"] .dot { background: #d4af37; }
+
+        .theme-btn[data-theme="futuristic"] {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: #00f0ff;
+        }
+        .theme-btn[data-theme="futuristic"] .dot { background: #00f0ff; box-shadow: 0 0 10px #00f0ff; }
+
+        .theme-btn[data-theme="editorial"] {
+            background: linear-gradient(135deg, #f5f5f0 0%, #e8e8e3 100%);
+            color: #1a1a1a;
+        }
+        .theme-btn[data-theme="editorial"] .dot { background: #ff4444; }
+
+        .theme-btn[data-theme="organic"] {
+            background: linear-gradient(135deg, #2d3a2d 0%, #3d4a3d 100%);
+            color: #a8d5a2;
+        }
+        .theme-btn[data-theme="organic"] .dot { background: #a8d5a2; }
+
+        .theme-btn:hover {
+            transform: translateX(4px);
+        }
+
+        .theme-btn.active {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        /* ========================================
+           BASE LAYOUT
+        ======================================== */
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ========================================
+           THEME 1: LUXURY / ELEGANCE
+        ======================================== */
+        body.theme-luxury {
+            background: #0d0d0d;
+            color: #f5f5f5;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .theme-luxury .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 120px 0;
+        }
+
+        .theme-luxury .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .theme-luxury nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(13, 13, 13, 0.9) 0%, transparent 100%);
+        }
+
+        .theme-luxury .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #d4af37;
+        }
+
+        .theme-luxury .nav-links {
+            display: flex;
+            gap: 50px;
+            list-style: none;
+        }
+
+        .theme-luxury .nav-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .theme-luxury .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        .theme-luxury .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .theme-luxury .greeting {
+            font-size: 14px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: #d4af37;
+            margin-bottom: 40px;
+            font-family: 'DM Sans', sans-serif;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .theme-luxury .name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(60px, 10vw, 140px);
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 30px;
+            letter-spacing: -2px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+
+        .theme-luxury .name span {
+            font-style: italic;
+            color: #d4af37;
+        }
+
+        .theme-luxury .title {
+            font-size: clamp(20px, 3vw, 32px);
+            font-weight: 300;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 600px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.4s forwards;
+        }
+
+        .theme-luxury .cta-group {
+            display: flex;
+            gap: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+
+        .theme-luxury .btn-primary {
+            padding: 20px 50px;
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .theme-luxury .btn-primary:hover {
+            background: #d4af37;
+            color: #0d0d0d;
+        }
+
+        .theme-luxury .btn-secondary {
+            padding: 20px 50px;
+            background: transparent;
+            border: 1px solid #333;
+            color: #888;
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .theme-luxury .btn-secondary:hover {
+            border-color: #888;
+            color: #fff;
+        }
+
+        .theme-luxury .scroll-indicator {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            color: #444;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .theme-luxury .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, #d4af37 0%, transparent 100%);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        /* ========================================
+           THEME 2: FUTURISTIC / TECH
+        ======================================== */
+        body.theme-futuristic {
+            background: #050510;
+            color: #e0e0e0;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .theme-futuristic .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 120px 0;
+            overflow: hidden;
+        }
+
+        .theme-futuristic .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        .theme-futuristic .hero::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .theme-futuristic nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 25px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(5, 5, 16, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .theme-futuristic .logo {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #00f0ff;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+
+        .theme-futuristic .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .theme-futuristic .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-futuristic .nav-links a::before {
+            content: '//';
+            margin-right: 8px;
+            color: #00f0ff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-futuristic .nav-links a:hover {
+            color: #00f0ff;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .theme-futuristic .nav-links a:hover::before {
+            opacity: 1;
+        }
+
+        .theme-futuristic .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .theme-futuristic .status-line {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            font-size: 11px;
+            color: #00f0ff;
+            opacity: 0;
+            animation: glitchIn 0.5s ease forwards;
+        }
+
+        .theme-futuristic .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00f0ff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #00f0ff;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .theme-futuristic .name {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(50px, 9vw, 120px);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            opacity: 0;
+            animation: glitchIn 0.5s ease 0.2s forwards;
+            position: relative;
+        }
+
+        .theme-futuristic .name::after {
+            content: 'MAXIME RAZAFINJATO';
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #ff00ff;
+            clip-path: inset(0 0 0 0);
+            animation: glitch 3s infinite;
+            opacity: 0.3;
+        }
+
+        .theme-futuristic .title {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 50px;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: glitchIn 0.5s ease 0.4s forwards;
+        }
+
+        .theme-futuristic .title span {
+            color: #00f0ff;
+        }
+
+        .theme-futuristic .stats {
+            display: flex;
+            gap: 60px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: glitchIn 0.5s ease 0.6s forwards;
+        }
+
+        .theme-futuristic .stat {
+            text-align: left;
+        }
+
+        .theme-futuristic .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            color: #00f0ff;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        }
+
+        .theme-futuristic .stat-label {
+            font-size: 10px;
+            color: #555;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .theme-futuristic .cta-group {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            animation: glitchIn 0.5s ease 0.8s forwards;
+        }
+
+        .theme-futuristic .btn-primary {
+            padding: 18px 40px;
+            background: transparent;
+            border: 2px solid #00f0ff;
+            color: #00f0ff;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Mono', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-futuristic .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .theme-futuristic .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .theme-futuristic .btn-primary:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .theme-futuristic .btn-secondary {
+            padding: 18px 40px;
+            background: transparent;
+            border: 1px solid #333;
+            color: #666;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .theme-futuristic .btn-secondary:hover {
+            border-color: #666;
+            color: #fff;
+        }
+
+        /* ========================================
+           THEME 3: EDITORIAL / MAGAZINE
+        ======================================== */
+        body.theme-editorial {
+            background: #f8f7f4;
+            color: #1a1a1a;
+            font-family: 'Instrument Sans', sans-serif;
+        }
+
+        .theme-editorial .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .theme-editorial nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .theme-editorial .logo {
+            font-family: 'Fraunces', serif;
+            font-size: 28px;
+            font-weight: 400;
+            color: #fff;
+        }
+
+        .theme-editorial .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .theme-editorial .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-editorial .nav-links a:hover {
+            opacity: 0.6;
+        }
+
+        .theme-editorial .hero-left {
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 80px;
+            position: relative;
+        }
+
+        .theme-editorial .hero-left::after {
+            content: '01';
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            font-family: 'Fraunces', serif;
+            font-size: 200px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.03);
+            line-height: 1;
+        }
+
+        .theme-editorial .year-tag {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #ff4444;
+            margin-bottom: 40px;
+            font-weight: 600;
+            opacity: 0;
+            animation: slideRight 0.8s ease forwards;
+        }
+
+        .theme-editorial .name {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 400;
+            line-height: 1.1;
+            color: #fff;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: slideRight 0.8s ease 0.2s forwards;
+        }
+
+        .theme-editorial .name em {
+            font-style: italic;
+            color: #ff4444;
+        }
+
+        .theme-editorial .description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #888;
+            max-width: 400px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: slideRight 0.8s ease 0.4s forwards;
+        }
+
+        .theme-editorial .cta-group {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            animation: slideRight 0.8s ease 0.6s forwards;
+        }
+
+        .theme-editorial .btn-primary {
+            padding: 18px 40px;
+            background: #ff4444;
+            border: none;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-editorial .btn-primary:hover {
+            background: #fff;
+            color: #1a1a1a;
+        }
+
+        .theme-editorial .btn-secondary {
+            padding: 18px 40px;
+            background: transparent;
+            border: 1px solid #444;
+            color: #888;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-editorial .btn-secondary:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .theme-editorial .hero-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 80px;
+            position: relative;
+        }
+
+        .theme-editorial .role-large {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(60px, 8vw, 120px);
+            font-weight: 300;
+            line-height: 1;
+            color: #1a1a1a;
+            writing-mode: vertical-lr;
+            text-orientation: mixed;
+            position: absolute;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            animation: fadeIn 1s ease 0.8s forwards;
+        }
+
+        .theme-editorial .skills-preview {
+            max-width: 300px;
+        }
+
+        .theme-editorial .skills-title {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: slideLeft 0.8s ease 0.4s forwards;
+        }
+
+        .theme-editorial .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+            opacity: 0;
+            animation: slideLeft 0.8s ease calc(0.5s + var(--delay)) forwards;
+        }
+
+        .theme-editorial .skill-name {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        .theme-editorial .skill-years {
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 2px;
+        }
+
+        /* ========================================
+           THEME 4: ORGANIC / NATURAL
+        ======================================== */
+        body.theme-organic {
+            background: linear-gradient(135deg, #1a2318 0%, #0d1510 100%);
+            color: #e8f0e6;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .theme-organic .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 120px 40px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .theme-organic .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(168, 213, 162, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 80%, rgba(168, 213, 162, 0.06) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 200, 150, 0.04) 0%, transparent 50%);
+            animation: organicFloat 20s ease-in-out infinite;
+        }
+
+        .theme-organic .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: blobFloat 15s ease-in-out infinite;
+        }
+
+        .theme-organic .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(168, 213, 162, 0.3) 0%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .theme-organic .blob-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 200, 150, 0.2) 0%, transparent 70%);
+            bottom: 20%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+
+        .theme-organic nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .theme-organic .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #a8d5a2;
+            letter-spacing: 1px;
+        }
+
+        .theme-organic .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .theme-organic .nav-links a {
+            color: #7a9a76;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .theme-organic .nav-links a:hover {
+            color: #a8d5a2;
+        }
+
+        .theme-organic .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .theme-organic .leaf-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 40px;
+            opacity: 0.6;
+            animation: gentleRotate 10s ease-in-out infinite;
+        }
+
+        .theme-organic .leaf-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #a8d5a2;
+        }
+
+        .theme-organic .greeting {
+            font-size: 16px;
+            color: #7a9a76;
+            margin-bottom: 20px;
+            font-weight: 400;
+            opacity: 0;
+            animation: organicFadeIn 1s ease forwards;
+        }
+
+        .theme-organic .name {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(48px, 8vw, 100px);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #e8f0e6 0%, #a8d5a2 50%, #ffc896 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: organicFadeIn 1s ease 0.2s forwards;
+        }
+
+        .theme-organic .title {
+            font-size: 18px;
+            color: #7a9a76;
+            margin-bottom: 20px;
+            font-weight: 500;
+            opacity: 0;
+            animation: organicFadeIn 1s ease 0.4s forwards;
+        }
+
+        .theme-organic .description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #5a7a56;
+            max-width: 500px;
+            margin: 0 auto 50px;
+            opacity: 0;
+            animation: organicFadeIn 1s ease 0.6s forwards;
+        }
+
+        .theme-organic .cta-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            animation: organicFadeIn 1s ease 0.8s forwards;
+        }
+
+        .theme-organic .btn-primary {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #a8d5a2 0%, #8bc084 100%);
+            border: none;
+            color: #1a2318;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .theme-organic .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(168, 213, 162, 0.3);
+        }
+
+        .theme-organic .btn-secondary {
+            padding: 18px 40px;
+            background: transparent;
+            border: 1px solid #4a6a46;
+            color: #a8d5a2;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .theme-organic .btn-secondary:hover {
+            background: rgba(168, 213, 162, 0.1);
+            border-color: #a8d5a2;
+        }
+
+        .theme-organic .scroll-hint {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            color: #5a7a56;
+            font-size: 12px;
+        }
+
+        .theme-organic .scroll-circle {
+            width: 40px;
+            height: 60px;
+            border: 2px solid #4a6a46;
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .theme-organic .scroll-dot {
+            width: 6px;
+            height: 6px;
+            background: #a8d5a2;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+
+        /* ========================================
+           ANIMATIONS
+        ======================================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes glitchIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-10px);
+                filter: blur(5px);
+            }
+            50% {
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes glitch {
+            0%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+            20% {
+                clip-path: inset(20% 0 60% 0);
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                clip-path: inset(60% 0 10% 0);
+                transform: translate(2px, -2px);
+            }
+            60% {
+                clip-path: inset(40% 0 40% 0);
+                transform: translate(-2px, 0);
+            }
+            80% {
+                clip-path: inset(10% 0 80% 0);
+                transform: translate(2px, 2px);
+            }
+        }
+
+        @keyframes gridMove {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scaleY(0.8);
+            }
+        }
+
+        @keyframes organicFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(20px, -20px) rotate(2deg);
+            }
+            66% {
+                transform: translate(-10px, 10px) rotate(-1deg);
+            }
+        }
+
+        @keyframes blobFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        @keyframes organicFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gentleRotate {
+            0%, 100% {
+                transform: rotate(-5deg);
+            }
+            50% {
+                transform: rotate(5deg);
+            }
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% {
+                top: 10px;
+                opacity: 1;
+            }
+            50% {
+                top: 35px;
+                opacity: 0.3;
+            }
+        }
+
+        /* ========================================
+           HIDE/SHOW SECTIONS
+        ======================================== */
+        .hero { display: none !important; }
+        .theme-luxury .hero.luxury-hero { display: flex !important; }
+        .theme-futuristic .hero.futuristic-hero { display: flex !important; }
+        .theme-editorial .hero.editorial-hero { display: grid !important; }
+        .theme-organic .hero.organic-hero { display: flex !important; }
+
+        nav { display: none !important; }
+        .theme-luxury nav.luxury-nav { display: flex !important; }
+        .theme-futuristic nav.futuristic-nav { display: flex !important; }
+        .theme-editorial nav.editorial-nav { display: flex !important; }
+        .theme-organic nav.organic-nav { display: flex !important; }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 1024px) {
+            .theme-editorial .hero {
+                grid-template-columns: 1fr;
+            }
+            .theme-editorial .hero-right {
+                display: none;
+            }
+            .theme-editorial .hero-left {
+                padding: 120px 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .theme-switcher {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                padding: 12px;
+            }
+
+            .theme-switcher h3 {
+                display: none;
+            }
+
+            .theme-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .theme-btn {
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+
+            .theme-btn span:not(.dot) {
+                display: none;
+            }
+
+            nav {
+                padding: 20px 30px !important;
+            }
+
+            .nav-links {
+                display: none !important;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="theme-luxury">
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <h3>Choisir le style</h3>
+        <div class="theme-buttons">
+            <button class="theme-btn active" data-theme="luxury">
+                <span class="dot"></span>
+                <span>Luxe & Elegance</span>
+            </button>
+            <button class="theme-btn" data-theme="futuristic">
+                <span class="dot"></span>
+                <span>Tech Futuriste</span>
+            </button>
+            <button class="theme-btn" data-theme="editorial">
+                <span class="dot"></span>
+                <span>Editorial Magazine</span>
+            </button>
+            <button class="theme-btn" data-theme="organic">
+                <span class="dot"></span>
+                <span>Organique & Naturel</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================
+         THEME 1: LUXURY
+    ======================================== -->
+    <nav class="luxury-nav">
+        <div class="logo">MAXIME</div>
+        <ul class="nav-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Experience</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero luxury-hero">
+        <div class="container">
+            <div class="hero-content">
+                <p class="greeting">Hello, I'm</p>
+                <h1 class="name">Maxime<br><span>Razafinjato</span></h1>
+                <p class="title">QA Lead & Full-Stack Developer crafting exceptional digital experiences with precision and elegance.</p>
+                <div class="cta-group">
+                    <button class="btn-primary">Get in Touch</button>
+                    <button class="btn-secondary">View Projects</button>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         THEME 2: FUTURISTIC
+    ======================================== -->
+    <nav class="futuristic-nav">
+        <div class="logo">&lt;MR/&gt;</div>
+        <ul class="nav-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Experience</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero futuristic-hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="status-line">
+                    <span class="status-dot"></span>
+                    <span>SYSTEM_STATUS: ONLINE // LOCATION: FRANCE</span>
+                </div>
+                <h1 class="name">MAXIME<br>RAZAFINJATO</h1>
+                <p class="title">QA_LEAD <span>&&</span> FULL_STACK_DEVELOPER</p>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">5+</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Projects Completed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">99%</div>
+                        <div class="stat-label">Test Coverage</div>
+                    </div>
+                </div>
+                <div class="cta-group">
+                    <button class="btn-primary">INIT_CONTACT()</button>
+                    <button class="btn-secondary">VIEW_PROJECTS[]</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         THEME 3: EDITORIAL
+    ======================================== -->
+    <nav class="editorial-nav">
+        <div class="logo">MR</div>
+        <ul class="nav-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Work</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero editorial-hero">
+        <div class="hero-left">
+            <p class="year-tag">PORTFOLIO 2025</p>
+            <h1 class="name">Maxime<br><em>Razafinjato</em></h1>
+            <p class="description">QA Lead & Full-Stack Developer based in France. I create robust, tested, and beautifully crafted digital products.</p>
+            <div class="cta-group">
+                <button class="btn-primary">Start a Project</button>
+                <button class="btn-secondary">Download CV</button>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="skills-preview">
+                <p class="skills-title">Core Expertise</p>
+                <div class="skill-item" style="--delay: 0s">
+                    <span class="skill-name">React</span>
+                    <span class="skill-years">5 yrs</span>
+                </div>
+                <div class="skill-item" style="--delay: 0.1s">
+                    <span class="skill-name">.NET Core</span>
+                    <span class="skill-years">4 yrs</span>
+                </div>
+                <div class="skill-item" style="--delay: 0.2s">
+                    <span class="skill-name">QA & Testing</span>
+                    <span class="skill-years">5 yrs</span>
+                </div>
+                <div class="skill-item" style="--delay: 0.3s">
+                    <span class="skill-name">TypeScript</span>
+                    <span class="skill-years">4 yrs</span>
+                </div>
+            </div>
+            <div class="role-large">Developer</div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         THEME 4: ORGANIC
+    ======================================== -->
+    <nav class="organic-nav">
+        <div class="logo">Maxime R.</div>
+        <ul class="nav-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Experience</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero organic-hero">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="hero-content">
+            <div class="leaf-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+                </svg>
+            </div>
+            <p class="greeting">Bienvenue</p>
+            <h1 class="name">Maxime Razafinjato</h1>
+            <p class="title">QA Lead & Full-Stack Developer</p>
+            <p class="description">Je crée des produits digitaux robustes et élégants, en combinant expertise technique et approche humaine.</p>
+            <div class="cta-group">
+                <button class="btn-primary">Me contacter</button>
+                <button class="btn-secondary">Voir mes projets</button>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            <div class="scroll-circle">
+                <div class="scroll-dot"></div>
+            </div>
+            <span>Défiler</span>
+        </div>
+    </section>
+
+    <script>
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.dataset.theme;
+
+                // Remove all theme classes
+                body.classList.remove('theme-luxury', 'theme-futuristic', 'theme-editorial', 'theme-organic');
+
+                // Add new theme class
+                body.classList.add(`theme-${theme}`);
+
+                // Update active button
+                themeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Re-trigger animations
+                const heroContent = document.querySelector(`.${theme}-hero .hero-content, .${theme}-hero .hero-left`);
+                if (heroContent) {
+                    heroContent.style.animation = 'none';
+                    heroContent.offsetHeight; // Trigger reflow
+                    heroContent.style.animation = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

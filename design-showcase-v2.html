@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxime Razafinjato - Design Showcase V2</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Satoshi:wght@400;500;700;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Clash+Display:wght@400;500;600;700&family=General+Sans:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --transition-speed: 0.5s;
+        }
+
+        /* ========================================
+           THEME SWITCHER
+        ======================================== */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.95);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'General Sans', sans-serif;
+        }
+
+        .theme-switcher h3 {
+            color: #fff;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .theme-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .theme-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-btn .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .theme-btn[data-theme="brutalist"] {
+            background: #fff;
+            color: #000;
+            border: 3px solid #000;
+        }
+        .theme-btn[data-theme="brutalist"] .dot { background: #ff0000; }
+
+        .theme-btn[data-theme="aurora"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: #fff;
+        }
+        .theme-btn[data-theme="aurora"] .dot { background: #fff; }
+
+        .theme-btn[data-theme="japanese"] {
+            background: #fafaf8;
+            color: #1a1a1a;
+            border: 1px solid #e0e0e0;
+        }
+        .theme-btn[data-theme="japanese"] .dot { background: #c41e3a; }
+
+        .theme-btn[data-theme="academia"] {
+            background: linear-gradient(135deg, #2c1810 0%, #3d2317 100%);
+            color: #d4a574;
+        }
+        .theme-btn[data-theme="academia"] .dot { background: #d4a574; }
+
+        .theme-btn:hover {
+            transform: translateX(4px);
+        }
+
+        .theme-btn.active {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        /* ========================================
+           BASE
+        ======================================== */
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background var(--transition-speed) ease;
+        }
+
+        /* ========================================
+           THEME 1: NEO-BRUTALIST
+        ======================================== */
+        body.theme-brutalist {
+            background: #f5f5f5;
+            color: #000;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .theme-brutalist .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 100px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-brutalist .hero::before {
+            content: 'DEV';
+            position: absolute;
+            top: -100px;
+            right: -50px;
+            font-size: 500px;
+            font-weight: 900;
+            color: rgba(0, 0, 0, 0.03);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .theme-brutalist nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: #f5f5f5;
+            border-bottom: 4px solid #000;
+        }
+
+        .theme-brutalist .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #000;
+            background: #ffff00;
+            padding: 8px 16px;
+            border: 4px solid #000;
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .theme-brutalist .nav-links {
+            display: flex;
+            gap: 10px;
+            list-style: none;
+        }
+
+        .theme-brutalist .nav-links a {
+            color: #000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 900;
+            padding: 10px 20px;
+            border: 3px solid #000;
+            transition: all 0.2s ease;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .theme-brutalist .nav-links a:hover {
+            background: #000;
+            color: #fff;
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .theme-brutalist .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .theme-brutalist .label {
+            display: inline-block;
+            background: #ff0000;
+            color: #fff;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            margin-bottom: 30px;
+            border: 3px solid #000;
+            transform: rotate(-2deg);
+            opacity: 0;
+            animation: brutalistSlide 0.5s ease forwards;
+        }
+
+        .theme-brutalist .name {
+            font-size: clamp(60px, 12vw, 160px);
+            font-weight: 900;
+            line-height: 0.9;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: -4px;
+            opacity: 0;
+            animation: brutalistSlide 0.5s ease 0.1s forwards;
+        }
+
+        .theme-brutalist .name span {
+            display: block;
+            color: #fff;
+            -webkit-text-stroke: 4px #000;
+        }
+
+        .theme-brutalist .title {
+            font-size: 24px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            margin-bottom: 40px;
+            padding: 15px 25px;
+            background: #00ff00;
+            border: 4px solid #000;
+            display: inline-block;
+            box-shadow: 8px 8px 0 #000;
+            opacity: 0;
+            animation: brutalistSlide 0.5s ease 0.2s forwards;
+        }
+
+        .theme-brutalist .cta-group {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            animation: brutalistSlide 0.5s ease 0.3s forwards;
+        }
+
+        .theme-brutalist .btn-primary {
+            padding: 20px 40px;
+            background: #000;
+            border: 4px solid #000;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .theme-brutalist .btn-primary:hover {
+            background: #ff0000;
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 #000;
+        }
+
+        .theme-brutalist .btn-secondary {
+            padding: 20px 40px;
+            background: #fff;
+            border: 4px solid #000;
+            color: #000;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .theme-brutalist .btn-secondary:hover {
+            background: #ffff00;
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 #000;
+        }
+
+        .theme-brutalist .floating-shapes {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 400px;
+            pointer-events: none;
+        }
+
+        .theme-brutalist .shape {
+            position: absolute;
+            border: 4px solid #000;
+        }
+
+        .theme-brutalist .shape-1 {
+            width: 100px;
+            height: 100px;
+            background: #ff0000;
+            top: 150px;
+            right: 200px;
+            animation: floatBrutalist 3s ease-in-out infinite;
+        }
+
+        .theme-brutalist .shape-2 {
+            width: 60px;
+            height: 60px;
+            background: #00ff00;
+            top: 280px;
+            right: 100px;
+            border-radius: 50%;
+            animation: floatBrutalist 3s ease-in-out infinite 0.5s;
+        }
+
+        .theme-brutalist .shape-3 {
+            width: 80px;
+            height: 80px;
+            background: #ffff00;
+            top: 100px;
+            right: 80px;
+            transform: rotate(45deg);
+            animation: floatBrutalist 3s ease-in-out infinite 1s;
+        }
+
+        /* ========================================
+           THEME 2: AURORA / GRADIENT MESH
+        ======================================== */
+        body.theme-aurora {
+            background: #0a0a0f;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .theme-aurora .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-aurora .aurora-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+        }
+
+        .theme-aurora .aurora-gradient {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(34, 211, 238, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(251, 146, 60, 0.2) 0%, transparent 50%);
+            animation: auroraMove 15s ease-in-out infinite;
+            filter: blur(60px);
+        }
+
+        .theme-aurora .aurora-gradient-2 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 30% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 30%, rgba(244, 114, 182, 0.25) 0%, transparent 40%);
+            animation: auroraMove 20s ease-in-out infinite reverse;
+            filter: blur(80px);
+        }
+
+        .theme-aurora nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(10, 10, 15, 0.8) 0%, transparent 100%);
+        }
+
+        .theme-aurora .logo {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a78bfa 0%, #f472b6 50%, #fb923c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-aurora .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .theme-aurora .nav-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .theme-aurora .nav-links a:hover {
+            color: #fff;
+        }
+
+        .theme-aurora .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .theme-aurora .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            animation: auroraFadeIn 1s ease forwards;
+        }
+
+        .theme-aurora .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #22d3ee, #a78bfa);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .theme-aurora .name {
+            font-family: 'Clash Display', sans-serif;
+            font-size: clamp(50px, 10vw, 120px);
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 30%, #f472b6 60%, #fb923c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: auroraFadeIn 1s ease 0.2s forwards;
+        }
+
+        .theme-aurora .title {
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: auroraFadeIn 1s ease 0.4s forwards;
+        }
+
+        .theme-aurora .cta-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            animation: auroraFadeIn 1s ease 0.6s forwards;
+        }
+
+        .theme-aurora .btn-primary {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+            border: none;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-aurora .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ec4899 0%, #fb923c 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .theme-aurora .btn-primary span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .theme-aurora .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        .theme-aurora .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.4);
+        }
+
+        .theme-aurora .btn-secondary {
+            padding: 18px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-aurora .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .theme-aurora .scroll-indicator {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+        }
+
+        .theme-aurora .scroll-mouse {
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .theme-aurora .scroll-wheel {
+            width: 4px;
+            height: 8px;
+            background: linear-gradient(to bottom, #a78bfa, transparent);
+            border-radius: 2px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollWheel 2s ease-in-out infinite;
+        }
+
+        /* ========================================
+           THEME 3: JAPANESE MINIMAL
+        ======================================== */
+        body.theme-japanese {
+            background: #fafaf8;
+            color: #1a1a1a;
+            font-family: 'Newsreader', serif;
+        }
+
+        .theme-japanese .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .theme-japanese nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 40px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .theme-japanese .logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            font-family: 'General Sans', sans-serif;
+        }
+
+        .theme-japanese .nav-links {
+            display: flex;
+            gap: 50px;
+            list-style: none;
+        }
+
+        .theme-japanese .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-family: 'General Sans', sans-serif;
+            transition: color 0.3s ease;
+        }
+
+        .theme-japanese .nav-links a:hover {
+            color: #c41e3a;
+        }
+
+        .theme-japanese .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 100px 80px;
+            position: relative;
+        }
+
+        .theme-japanese .vertical-text {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%) rotate(180deg);
+            writing-mode: vertical-rl;
+            font-size: 12px;
+            letter-spacing: 8px;
+            color: #ccc;
+            font-family: 'General Sans', sans-serif;
+        }
+
+        .theme-japanese .greeting {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 20px;
+            font-style: italic;
+            opacity: 0;
+            animation: japaneseSlide 0.8s ease forwards;
+        }
+
+        .theme-japanese .name {
+            font-size: clamp(48px, 6vw, 80px);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: japaneseSlide 0.8s ease 0.1s forwards;
+        }
+
+        .theme-japanese .name span {
+            color: #c41e3a;
+            font-style: italic;
+        }
+
+        .theme-japanese .divider {
+            width: 60px;
+            height: 1px;
+            background: #c41e3a;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: japaneseSlide 0.8s ease 0.2s forwards;
+        }
+
+        .theme-japanese .title {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.8;
+            max-width: 400px;
+            margin-bottom: 50px;
+            font-family: 'General Sans', sans-serif;
+            opacity: 0;
+            animation: japaneseSlide 0.8s ease 0.3s forwards;
+        }
+
+        .theme-japanese .cta-group {
+            display: flex;
+            gap: 30px;
+            opacity: 0;
+            animation: japaneseSlide 0.8s ease 0.4s forwards;
+        }
+
+        .theme-japanese .btn-primary {
+            padding: 16px 40px;
+            background: #1a1a1a;
+            border: none;
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'General Sans', sans-serif;
+        }
+
+        .theme-japanese .btn-primary:hover {
+            background: #c41e3a;
+        }
+
+        .theme-japanese .btn-secondary {
+            padding: 16px 40px;
+            background: transparent;
+            border: 1px solid #ddd;
+            color: #666;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'General Sans', sans-serif;
+        }
+
+        .theme-japanese .btn-secondary:hover {
+            border-color: #1a1a1a;
+            color: #1a1a1a;
+        }
+
+        .theme-japanese .hero-right {
+            background: #f0f0ec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-japanese .circle-decoration {
+            width: 500px;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .theme-japanese .circle-decoration::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+        }
+
+        .theme-japanese .circle-decoration::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: #c41e3a;
+            border-radius: 50%;
+        }
+
+        .theme-japanese .kanji {
+            position: absolute;
+            font-size: 200px;
+            color: rgba(0, 0, 0, 0.03);
+            font-family: serif;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* ========================================
+           THEME 4: DARK ACADEMIA
+        ======================================== */
+        body.theme-academia {
+            background: #1a1510;
+            color: #e8dcc8;
+            font-family: 'Libre Baskerville', serif;
+        }
+
+        .theme-academia .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 100px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-academia .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .theme-academia .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 30% 30%, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .theme-academia nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.1);
+        }
+
+        .theme-academia .logo {
+            font-size: 20px;
+            font-weight: 400;
+            color: #d4a574;
+            font-style: italic;
+        }
+
+        .theme-academia .nav-links {
+            display: flex;
+            gap: 50px;
+            list-style: none;
+        }
+
+        .theme-academia .nav-links a {
+            color: #8a7a6a;
+            text-decoration: none;
+            font-size: 14px;
+            font-style: italic;
+            transition: color 0.3s ease;
+        }
+
+        .theme-academia .nav-links a:hover {
+            color: #d4a574;
+        }
+
+        .theme-academia .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .theme-academia .chapter {
+            font-size: 12px;
+            letter-spacing: 6px;
+            color: #8a7a6a;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            font-family: 'General Sans', sans-serif;
+            opacity: 0;
+            animation: academiaFade 1s ease forwards;
+        }
+
+        .theme-academia .name {
+            font-size: clamp(50px, 8vw, 100px);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            font-style: italic;
+            opacity: 0;
+            animation: academiaFade 1s ease 0.2s forwards;
+        }
+
+        .theme-academia .name span {
+            color: #d4a574;
+            display: block;
+            font-style: normal;
+        }
+
+        .theme-academia .quote {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #8a7a6a;
+            margin-bottom: 20px;
+            padding-left: 30px;
+            border-left: 2px solid #d4a574;
+            font-style: italic;
+            max-width: 500px;
+            opacity: 0;
+            animation: academiaFade 1s ease 0.4s forwards;
+        }
+
+        .theme-academia .title {
+            font-size: 14px;
+            color: #6a5a4a;
+            margin-bottom: 50px;
+            font-family: 'General Sans', sans-serif;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: academiaFade 1s ease 0.5s forwards;
+        }
+
+        .theme-academia .cta-group {
+            display: flex;
+            gap: 30px;
+            opacity: 0;
+            animation: academiaFade 1s ease 0.6s forwards;
+        }
+
+        .theme-academia .btn-primary {
+            padding: 18px 45px;
+            background: transparent;
+            border: 1px solid #d4a574;
+            color: #d4a574;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'General Sans', sans-serif;
+        }
+
+        .theme-academia .btn-primary:hover {
+            background: #d4a574;
+            color: #1a1510;
+        }
+
+        .theme-academia .btn-secondary {
+            padding: 18px 45px;
+            background: transparent;
+            border: 1px solid #3a3530;
+            color: #8a7a6a;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-family: 'General Sans', sans-serif;
+        }
+
+        .theme-academia .btn-secondary:hover {
+            border-color: #8a7a6a;
+            color: #e8dcc8;
+        }
+
+        .theme-academia .decoration {
+            position: absolute;
+            right: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            height: 400px;
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            opacity: 0;
+            animation: academiaFade 1s ease 0.8s forwards;
+        }
+
+        .theme-academia .decoration::before {
+            content: '"';
+            position: absolute;
+            top: -40px;
+            left: -20px;
+            font-size: 150px;
+            color: rgba(212, 165, 116, 0.1);
+            font-family: 'Libre Baskerville', serif;
+        }
+
+        .theme-academia .book-pages {
+            position: absolute;
+            bottom: 60px;
+            right: 80px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .theme-academia .page {
+            width: 3px;
+            height: 40px;
+            background: rgba(212, 165, 116, 0.2);
+        }
+
+        /* ========================================
+           ANIMATIONS
+        ======================================== */
+        @keyframes brutalistSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes floatBrutalist {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        @keyframes auroraMove {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -30px) rotate(5deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(-5deg);
+            }
+        }
+
+        @keyframes auroraFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        @keyframes scrollWheel {
+            0%, 100% { top: 8px; opacity: 1; }
+            50% { top: 20px; opacity: 0; }
+        }
+
+        @keyframes japaneseSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes academiaFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========================================
+           HIDE/SHOW
+        ======================================== */
+        .hero { display: none !important; }
+        .theme-brutalist .hero.brutalist-hero { display: flex !important; }
+        .theme-aurora .hero.aurora-hero { display: flex !important; }
+        .theme-japanese .hero.japanese-hero { display: grid !important; }
+        .theme-academia .hero.academia-hero { display: flex !important; }
+
+        nav { display: none !important; }
+        .theme-brutalist nav.brutalist-nav { display: flex !important; }
+        .theme-aurora nav.aurora-nav { display: flex !important; }
+        .theme-japanese nav.japanese-nav { display: flex !important; }
+        .theme-academia nav.academia-nav { display: flex !important; }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 1024px) {
+            .theme-japanese .hero {
+                grid-template-columns: 1fr;
+            }
+            .theme-japanese .hero-right {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .theme-switcher {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .theme-switcher h3 {
+                display: none;
+            }
+
+            .theme-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .theme-btn span:not(.dot) {
+                display: none;
+            }
+
+            nav {
+                padding: 20px 30px !important;
+            }
+
+            .nav-links {
+                display: none !important;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .theme-brutalist .floating-shapes,
+            .theme-academia .decoration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="theme-brutalist">
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <h3>Nouveau Style</h3>
+        <div class="theme-buttons">
+            <button class="theme-btn active" data-theme="brutalist">
+                <span class="dot"></span>
+                <span>Neo-Brutalist</span>
+            </button>
+            <button class="theme-btn" data-theme="aurora">
+                <span class="dot"></span>
+                <span>Aurora Gradient</span>
+            </button>
+            <button class="theme-btn" data-theme="japanese">
+                <span class="dot"></span>
+                <span>Japanese Minimal</span>
+            </button>
+            <button class="theme-btn" data-theme="academia">
+                <span class="dot"></span>
+                <span>Dark Academia</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================
+         THEME 1: NEO-BRUTALIST
+    ======================================== -->
+    <nav class="brutalist-nav">
+        <div class="logo">MR.</div>
+        <ul class="nav-links">
+            <li><a href="#">ABOUT</a></li>
+            <li><a href="#">WORK</a></li>
+            <li><a href="#">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero brutalist-hero">
+        <div class="hero-content">
+            <span class="label">AVAILABLE FOR HIRE</span>
+            <h1 class="name">MAXIME<span>RAZAFINJATO</span></h1>
+            <p class="title">QA Lead & Full-Stack Developer</p>
+            <div class="cta-group">
+                <button class="btn-primary">HIRE ME</button>
+                <button class="btn-secondary">VIEW WORK</button>
+            </div>
+        </div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         THEME 2: AURORA
+    ======================================== -->
+    <nav class="aurora-nav">
+        <div class="logo">Maxime R.</div>
+        <ul class="nav-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Experience</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero aurora-hero">
+        <div class="aurora-bg">
+            <div class="aurora-gradient"></div>
+            <div class="aurora-gradient-2"></div>
+        </div>
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                <span>Open to opportunities</span>
+            </div>
+            <h1 class="name">Maxime<br>Razafinjato</h1>
+            <p class="title">QA Lead & Full-Stack Developer building robust digital experiences</p>
+            <div class="cta-group">
+                <button class="btn-primary"><span>Get in touch</span></button>
+                <button class="btn-secondary">View projects</button>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span>Scroll</span>
+        </div>
+    </section>
+
+    <!-- ========================================
+         THEME 3: JAPANESE MINIMAL
+    ======================================== -->
+    <nav class="japanese-nav">
+        <div class="logo">MAXIME</div>
+        <ul class="nav-links">
+            <li><a href="#">ABOUT</a></li>
+            <li><a href="#">PROJECTS</a></li>
+            <li><a href="#">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero japanese-hero">
+        <div class="hero-left">
+            <span class="vertical-text">PORTFOLIO 2025</span>
+            <p class="greeting">Hello, I'm</p>
+            <h1 class="name">Maxime<br><span>Razafinjato</span></h1>
+            <div class="divider"></div>
+            <p class="title">QA Lead & Full-Stack Developer. I craft digital products with precision, simplicity, and purpose.</p>
+            <div class="cta-group">
+                <button class="btn-primary">Contact</button>
+                <button class="btn-secondary">Projects</button>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="circle-decoration"></div>
+            <span class="kanji">開</span>
+        </div>
+    </section>
+
+    <!-- ========================================
+         THEME 4: DARK ACADEMIA
+    ======================================== -->
+    <nav class="academia-nav">
+        <div class="logo">Maxime R.</div>
+        <ul class="nav-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Works</a></li>
+            <li><a href="#">Writings</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero academia-hero">
+        <div class="hero-content">
+            <p class="chapter">Chapter I — Introduction</p>
+            <h1 class="name"><span>Maxime</span> Razafinjato</h1>
+            <p class="quote">"The pursuit of knowledge through craft and code."</p>
+            <p class="title">QA LEAD & FULL-STACK DEVELOPER</p>
+            <div class="cta-group">
+                <button class="btn-primary">Begin the journey</button>
+                <button class="btn-secondary">View archives</button>
+            </div>
+        </div>
+        <div class="decoration"></div>
+        <div class="book-pages">
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+        </div>
+    </section>
+
+    <script>
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.dataset.theme;
+
+                body.classList.remove('theme-brutalist', 'theme-aurora', 'theme-japanese', 'theme-academia');
+                body.classList.add(`theme-${theme}`);
+
+                themeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
