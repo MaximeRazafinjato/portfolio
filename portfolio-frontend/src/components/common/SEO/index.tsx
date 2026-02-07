@@ -15,7 +15,7 @@ interface SEOProps {
 
 const SITE_NAME = 'Maxime Razafinjato'
 const DEFAULT_IMAGE = '/og-image.png'
-const BASE_URL = 'https://maximerazafinjato.com'
+const BASE_URL = 'https://maxime-razafinjato.fr'
 
 function SEO({
   title,
@@ -42,6 +42,9 @@ function SEO({
       <title>{pageTitle}</title>
       <meta name="description" content={pageDescription} />
       <link rel="canonical" href={pageUrl} />
+      <link rel="alternate" hrefLang="fr" href={pageUrl} />
+      <link rel="alternate" hrefLang="en" href={pageUrl} />
+      <link rel="alternate" hrefLang="x-default" href={pageUrl} />
 
       {noIndex && <meta name="robots" content="noindex, nofollow" />}
 
@@ -68,6 +71,33 @@ function SEO({
       {type === 'article' && tags?.map((tag) => (
         <meta key={tag} property="article:tag" content={tag} />
       ))}
+
+      {type === 'article' && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: title,
+            description: pageDescription,
+            image: pageImage,
+            url: pageUrl,
+            datePublished: publishedTime,
+            dateModified: modifiedTime || publishedTime,
+            author: {
+              '@type': 'Person',
+              name: SITE_NAME,
+              url: BASE_URL,
+            },
+            publisher: {
+              '@type': 'Person',
+              name: SITE_NAME,
+              url: BASE_URL,
+            },
+            keywords: tags?.join(', '),
+            inLanguage: i18n.language,
+          })}
+        </script>
+      )}
     </Helmet>
   )
 }
