@@ -25,5 +25,3 @@ i18n
       caches: ['localStorage'],
     },
   })
-
-export default i18n

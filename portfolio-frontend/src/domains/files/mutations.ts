@@ -21,10 +21,3 @@ export function useUploadFileMutation() {
   })
 }
 
-export function useDeleteFileMutation() {
-  return useMutation({
-    mutationFn: async (blobName: string) => {
-      await api.delete(API_ENDPOINTS.deleteFile(blobName))
-    },
-  })
-}

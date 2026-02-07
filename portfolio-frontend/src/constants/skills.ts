@@ -1,4 +1,4 @@
-export interface SkillCategory {
+interface SkillCategory {
   id: string
   nameKey: string
   skills: string[]
