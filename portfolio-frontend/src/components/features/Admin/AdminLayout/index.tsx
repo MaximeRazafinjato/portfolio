@@ -58,6 +58,23 @@ export default function AdminLayout() {
     )
   }
 
+  if (user?.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-4">
+        <h1 className="text-2xl font-bold">Accès refusé</h1>
+        <p className="text-muted-foreground">Vous n'avez pas les droits d'accès à l'administration.</p>
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link to="/">Retour au site</Link>
+          </Button>
+          <Button variant="outline" onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
+            Déconnexion
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b px-6 py-4">
